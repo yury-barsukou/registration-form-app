@@ -34,7 +34,7 @@ const RegistrationForm = () => {
       hasUppercase: /[A-Z]/.test(password),
       hasLowercase: /[a-z]/.test(password),
       hasNumber: /[0-9]/.test(password),
-      isLongEnough: password.length >= 8,
+      isLongEnough: password.length >= 10,
     });
   };
 
