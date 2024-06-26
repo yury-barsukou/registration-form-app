@@ -138,7 +138,7 @@ const RegistrationForm = () => {
                   1 number
                 </li>
                 <li className={passwordValidations.isLongEnough ? 'valid' : 'invalid'}>
-                  Minimum 8 characters
+                  Minimum 10 characters
                 </li>
               </ul>
             </div>
