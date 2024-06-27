@@ -44,9 +44,9 @@ test('validates password input for a number', () => {
 test('validates password input for minimum length', () => {
   render(<RegistrationForm />);
   const passwordInput = screen.getByLabelText(/password/i);
-  fireEvent.change(passwordInput, { target: { value: 'Pass1' } });
-  expect(screen.getByText(/minimum 8 characters/i)).toHaveClass('invalid');
-  fireEvent.change(passwordInput, { target: { value: 'Password1' } });
-  expect(screen.getByText(/minimum 8 characters/i)).toHaveClass('valid');
+  fireEvent.change(passwordInput, { target: { value: 'Passw1' } });
+  expect(screen.getByText(/minimum 10 characters/i)).toHaveClass('invalid');
+  fireEvent.change(passwordInput, { target: { value: 'Password12' } });
+  expect(screen.getByText(/minimum 10 characters/i)).toHaveClass('valid');
 });
 });
