@@ -155,6 +155,9 @@ const RegistrationForm = () => {
             </button>
           </div>
         </div>
+        <div className="already-have-account">
+          Already have an account? <a href="/signin">Sign In</a>
+        </div>
         {/* Terms and Conditions */}
         <div id="termsConditions-container">
           <div className="venue-checkbox-container checkbox-container cf text-center m-top-md">
