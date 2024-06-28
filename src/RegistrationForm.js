@@ -65,6 +65,10 @@ const RegistrationForm = () => {
   return (
     <div id="myaxs-sign-up-auth" className="user-entry">
     <h1 className="text-center main-header">Sign Up</h1>
+    <div className="signin-link-container text-right">
+      <label>Already have an account?</label>
+      <a href="/signin" className="signin-link">Sign In</a>
+    </div>
     <form id="myaxs-create-form" onSubmit={handleSubmit}>
       <div className="inner-form-wrapper">
         {/* First Name */}
