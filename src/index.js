@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import RegistrationForm from './RegistrationForm';
+import SignInForm from './SignInForm';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <RegistrationForm />
+    <SignInForm />
   </React.StrictMode>
 );
 
