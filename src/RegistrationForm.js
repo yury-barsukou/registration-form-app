@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './RegistrationForm.css'; // Ensure this CSS file exists and contains the styles mentioned earlier
 
+import SignInForm from './SignInForm';
+
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
     firstName: '',
