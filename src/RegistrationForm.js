@@ -156,7 +156,8 @@ const RegistrationForm = () => {
           </div>
         </div>
         {/* Terms and Conditions */}
-        <div id="termsConditions-container">
+        <p>Already have an account? <a href="/signin">Sign In</a></p>
+<div id="termsConditions-container">
           <div className="venue-checkbox-container checkbox-container cf text-center m-top-md">
             <label htmlFor="venue-checkbox">
               By clicking Create Account, you agree to the AXS's{' '}
