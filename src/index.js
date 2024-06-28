@@ -2,12 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import RegistrationForm from './RegistrationForm';
+import SignInForm from './SignInForm';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RegistrationForm />
+    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+      <SignInForm />
+      <RegistrationForm />
+    </div>
   </React.StrictMode>
 );
 
