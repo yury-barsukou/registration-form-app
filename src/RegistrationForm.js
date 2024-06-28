@@ -143,7 +143,11 @@ const RegistrationForm = () => {
               </ul>
             </div>
           </div>
-          {/* Submit Button */}
+          {/* Sign In Link */}
+<div className="sign-in-link">
+  Already have an account? <a href="/signin">Sign In</a>
+</div>
+{/* Submit Button */}
           <div className="space-above-large">
             <button
               id="nextButton"
