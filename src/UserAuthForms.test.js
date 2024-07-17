@@ -5,6 +5,7 @@ describe('UserAuthForms', () => {
   test('renders UserAuthForms component', () => {
     render(<UserAuthForms />);
     expect(screen.getByText(/sign up/i)).toBeInTheDocument();
+    expect(screen.getByText(/sign in/i)).toBeInTheDocument(); // Added assertion for Sign In form
   });
 
   test('allows the user to enter their first name', () => {
