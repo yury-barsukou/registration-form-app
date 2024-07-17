@@ -44,6 +44,10 @@ const SignInForm = () => {
     <div id="myaxs-sign-in-auth" className="user-entry">
       <h1 className="text-center main-header">Sign In</h1>
       <form id="myaxs-sign-in-form" onSubmit={handleSubmit}>
+        <nav aria-label="Sign In" class="axsid-global-nav inner-form-wrapper">
+          <div id="signin-nav" class="axsid-nav-item axsid-nav-item--active"><a class="nav-header">Sign In</a></div>
+          <div id="signup-nav" class="axsid-nav-item"><a class="nav-header">Create AXS Account</a></div>
+        </nav>
         <div className="input-group">
           <label htmlFor="axs_email_signin">Email</label>
           <input
