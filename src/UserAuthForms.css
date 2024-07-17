@@ -105,3 +105,37 @@
   .checkbox-container {
     text-align: center;
   }
+
+  /* Styles for the form switch buttons */
+.form-switch {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.switch-button {
+  padding: 10px 20px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+}
+
+.switch-button.active {
+  border-bottom: 2px solid #007bff;
+}
+
+/* Styles for the forgot password link */
+.forgot-password {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.forgot-password a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
