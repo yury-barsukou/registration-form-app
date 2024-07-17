@@ -109,13 +109,13 @@ const UserAuthForms = () => {
       </div>
       {activeForm === 'signup' ? (
         // Registration form
-        <form id="myaxs-create-form" onSubmit={handleSubmit}>
+        <form id="mycompany-create-form" onSubmit={handleSubmit}>
           {/* First Name */}
           <div className="input-group">
-            <label htmlFor="axs_fname_create">First Name</label>
+            <label htmlFor="company_fname_create">First Name</label>
             <input
               type="text"
-              id="axs_fname_create"
+              id="company_fname_create"
               className="form-control"
               name="firstName"
               autoComplete="given-name"
@@ -126,10 +126,10 @@ const UserAuthForms = () => {
           </div>
           {/* Last Name */}
           <div className="input-group">
-            <label htmlFor="axs_lname_create">Last Name</label>
+            <label htmlFor="company_lname_create">Last Name</label>
             <input
               type="text"
-              id="axs_lname_create"
+              id="company_lname_create"
               className="form-control"
               name="lastName"
               autoComplete="family-name"
@@ -140,10 +140,10 @@ const UserAuthForms = () => {
           </div>
           {/* Email */}
           <div className="input-group">
-            <label htmlFor="axs_email_create">Email</label>
+            <label htmlFor="company_email_create">Email</label>
             <input
               type="email"
-              id="axs_email_create"
+              id="company_email_create"
               className="form-control"
               name="email"
               autoComplete="email"
@@ -158,10 +158,10 @@ const UserAuthForms = () => {
           </div>
           {/* Password */}
           <div className="input-group">
-            <label htmlFor="axs_pass_create">Password</label>
+            <label htmlFor="company_pass_create">Password</label>
             <input
               type="password"
-              id="axs_pass_create"
+              id="company_pass_create"
               className="form-control"
               name="password"
               autoComplete="new-password"
@@ -200,14 +200,14 @@ const UserAuthForms = () => {
         </form>
       ) : (
         // Sign In form
-        <form id="myaxs-login-form" onSubmit={handleSignInSubmit}>
+        <form id="mycompany-login-form" onSubmit={handleSignInSubmit}>
           <div className="inner-form-wrapper">
             {/* Email */}
             <div className="input-group">
-              <label htmlFor="axs_email_login">Email</label>
+              <label htmlFor="company_email_login">Email</label>
               <input
                 type="email"
-                id="axs_email_login"
+                id="company_email_login"
                 className="form-control"
                 name="email"
                 autoComplete="email"
@@ -217,10 +217,10 @@ const UserAuthForms = () => {
             </div>
             {/* Password */}
             <div className="input-group">
-              <label htmlFor="axs_pass_login">Password</label>
+              <label htmlFor="company_pass_login">Password</label>
               <input
                 type="password"
-                id="axs_pass_login"
+                id="company_pass_login"
                 className="form-control"
                 name="password"
                 autoComplete="current-password"
@@ -248,7 +248,7 @@ const UserAuthForms = () => {
       )}
       {/* Privacy Policy */}
       <div className="privacy-policy text-center m-top-sm m-bottom-lg">
-        <a className="legal-link" target="_blank" href="https://www.axs.com/about-privacy-policy_US_AU_NZ_v10.html" rel="noopener noreferrer">
+        <a className="legal-link" target="_blank" href="https://www.company.com/about-privacy-policy_US_AU_NZ_v10.html" rel="noopener noreferrer">
           Privacy Policy
         </a>
       </div>
