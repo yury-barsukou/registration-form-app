@@ -4,7 +4,7 @@ import UserAuthForms from './UserAuthForms';
 describe('UserAuthForms', () => {
   test('renders UserAuthForms component', () => {
     render(<UserAuthForms />);
-    expect(screen.getByText(/sign up/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Sign Up/i })).toBeInTheDocument();
   });
 
   test('allows the user to enter their first name', () => {
