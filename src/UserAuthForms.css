@@ -76,7 +76,7 @@
     color: red;
   }
   
-  .email-validation-message.invalid {
+  .email-validation-message.invalid, .password-validation-message.invalid {
     color: red;
     font-size: 0.9em;
     margin-top: 5px;

@@ -26,8 +26,11 @@ const UserAuthForms = () => {
     isLongEnough: false,
   });
 
-  // Registration form email validation state
+  // Email validation state for both forms
   const [isEmailValid, setIsEmailValid] = useState(true);
+
+  // Password length validation state for Sign In form
+  const [isSignInPasswordValid, setIsSignInPasswordValid] = useState(true);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -76,16 +79,25 @@ const UserAuthForms = () => {
   const handleSignInInputChange = (e) => {
     const { name, value } = e.target;
     setSignInData({ ...signInData, [name]: value });
+    if (name === 'email') {
+      validateEmail(value);
+    } else if (name === 'password') {
+      setIsSignInPasswordValid(value.length >= 8);
+    }
   };
 
   const handleSignInSubmit = (e) => {
     e.preventDefault();
-    console.log('Sign In submitted:', signInData);
-    // Handle the sign-in form submission, e.g., sending data to a server
+    if (isSignInFormValid()) {
+      console.log('Sign In submitted:', signInData);
+      // Handle the sign-in form submission, e.g., sending data to a server
+    } else {
+      console.error('Sign In form is invalid');
+    }
   };
 
   const isSignInFormValid = () => {
-    return signInData.email && signInData.password;
+    return signInData.email && isEmailValid && isSignInPasswordValid;
   };
 
   return (
@@ -152,7 +164,7 @@ const UserAuthForms = () => {
             />
             {!isEmailValid && (
               <div className="email-validation-message invalid">
-                Please enter a valid email address.
+                Please enter a valid email address
               </div>
             )}
           </div>
@@ -214,19 +226,29 @@ const UserAuthForms = () => {
                 value={signInData.email}
                 onChange={handleSignInInputChange}
               />
+              {!isEmailValid && (
+                <div className="email-validation-message invalid">
+                  Please enter a valid email address
+                </div>
+              )}
             </div>
             {/* Password */}
             <div className="input-group">
-              <label htmlFor="company_pass_login">Password</label>
+              <label htmlFor="company_email_login">Password</label>
               <input
                 type="password"
-                id="company_pass_login"
+                id="company_email_login"
                 className="form-control"
                 name="password"
                 autoComplete="current-password"
                 value={signInData.password}
                 onChange={handleSignInInputChange}
               />
+              {!isSignInPasswordValid && (
+                <div className="password-validation-message invalid">
+                  Your password must have at least 8 characters
+                </div>
+              )}
             </div>
             {/* Forgot Password Link */}
             <div className="forgot-password">
