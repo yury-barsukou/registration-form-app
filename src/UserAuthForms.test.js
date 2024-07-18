@@ -20,33 +20,39 @@ describe('UserAuthForms', () => {
     expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument();
   });
 
-  test('validates password input for uppercase character', () => {
-    render(<UserAuthForms />);
+  test('validates password input for uppercase character', async () => {
+    render(<SignUpForm />);
     const passwordInput = screen.getByLabelText(/password/i);
+    fireEvent.change(passwordInput, { target: { value: 'password1' } });
+    await waitFor(() => expect(screen.getByText(/1 uppercase character/i)).toHaveClass('invalid'));
     fireEvent.change(passwordInput, { target: { value: 'Password1' } });
-    expect(screen.getByText(/1 uppercase character/i)).toHaveClass('valid');
+    await waitFor(() => expect(screen.getByText(/1 uppercase character/i)).toHaveClass('valid'));
   });
 
-  test('validates password input for lowercase character', () => {
-    render(<UserAuthForms />);
+  test('validates password input for lowercase character', async () => {
+    render(<SignUpForm />);
     const passwordInput = screen.getByLabelText(/password/i);
+    fireEvent.change(passwordInput, { target: { value: 'PASSWORD1' } });
+    await waitFor(() => expect(screen.getByText(/1 lowercase character/i)).toHaveClass('invalid'));
     fireEvent.change(passwordInput, { target: { value: 'Password1' } });
-    expect(screen.getByText(/1 lowercase character/i)).toHaveClass('valid');
+    await waitFor(() => expect(screen.getByText(/1 lowercase character/i)).toHaveClass('valid'));
   });
 
-  test('validates password input for a number', () => {
-    render(<UserAuthForms />);
+  test('validates password input for a number', async () => {
+    render(<SignUpForm />);
     const passwordInput = screen.getByLabelText(/password/i);
+    fireEvent.change(passwordInput, { target: { value: 'Password' } });
+    await waitFor(() => expect(screen.getByText(/1 number/i)).toHaveClass('invalid'));
     fireEvent.change(passwordInput, { target: { value: 'Password1' } });
-    expect(screen.getByText(/1 number/i)).toHaveClass('valid');
+    await waitFor(() => expect(screen.getByText(/1 number/i)).toHaveClass('valid'));
   });
 
-  test('validates password input for minimum length', () => {
-    render(<UserAuthForms />);
+  test('validates password input for minimum length', async () => {
+    render(<SignUpForm />);
     const passwordInput = screen.getByLabelText(/password/i);
     fireEvent.change(passwordInput, { target: { value: 'Pass1' } });
-    expect(screen.getByText(/minimum 8 characters/i)).toHaveClass('invalid');
+    await waitFor(() => expect(screen.getByText(/minimum 8 characters/i)).toHaveClass('invalid'));
     fireEvent.change(passwordInput, { target: { value: 'Password1' } });
-    expect(screen.getByText(/minimum 8 characters/i)).toHaveClass('valid');
+    await waitFor(() => expect(screen.getByText(/minimum 8 characters/i)).toHaveClass('valid'));
   });
 });
