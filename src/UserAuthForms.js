@@ -9,7 +9,7 @@ const UserAuthForms = () => {
   return (
     <div className="user-entry">
       <h1 className="text-center main-header">
-        {activeForm === 'signin' ? 'Sign Ip' : 'Sign Un'}
+        {activeForm === 'signin' ? 'Sign In' : 'Sign Up'}
       </h1>
       <div className="form-switch">
         <button
