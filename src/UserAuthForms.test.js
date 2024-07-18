@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import UserAuthForms from './UserAuthForms';
+import SignInForm from './SignInForm';
+import SignUpForm from './SignUpForm';
 
 describe('UserAuthForms', () => {
   test('renders UserAuthForms component', () => {
