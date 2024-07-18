@@ -13,12 +13,14 @@ const UserAuthForms = () => {
       </h1>
       <div className="form-switch">
         <button
+          data-testid="signin-button"
           className={`switch-button ${activeForm === 'signin' ? 'active' : ''}`}
           onClick={() => setActiveForm('signin')}
         >
           Sign In
         </button>
         <button
+          data-testid="signup-button"
           className={`switch-button ${activeForm === 'signup' ? 'active' : ''}`}
           onClick={() => setActiveForm('signup')}
         >
