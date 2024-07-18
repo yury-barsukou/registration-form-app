@@ -4,7 +4,9 @@ import UserAuthForms from './UserAuthForms';
 describe('UserAuthForms', () => {
   test('renders UserAuthForms component', () => {
     render(<UserAuthForms />);
-    expect(screen.getByRole('button', { name: /Sign Up/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
+expect(screen.getByRole('button', { name: /Sign Up/i })).toBeInTheDocument(); // Ensure we can still access the Sign Up form
+fireEvent.click(screen.getByRole('button', { name: /Sign Up/i })); // Switch to Sign Up form before proceeding
   });
 
   test('allows the user to enter their first name', () => {
