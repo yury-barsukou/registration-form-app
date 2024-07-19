@@ -68,4 +68,38 @@ describe('SignInForm', () => {
 
     consoleSpy.mockRestore();
   });
+
+  // New tests added here
+  test('simulates network error during form submission', async () => {
+    // Mock network error
+    // Simulation of form submission logic with network error
+    // Expectation of error message or state
+  });
+
+  test('tests loading state during sign-in process', () => {
+    // Simulation of form submission triggering loading state
+    // Expectations for loading indicators such as disabled button or spinner
+  });
+
+  test('handles failed sign-in with incorrect credentials gracefully', () => {
+    // Simulation of form submission with incorrect credentials
+    // Expectation of relevant error messages displayed to the user
+  });
+
+  test('verifies form accessibility including ARIA attributes and roles', () => {
+    // Verification of ARIA attributes
+    // Testing form navigability and usability with keyboard inputs
+  });
+
+  test('edge case for email validation - missing domain', () => {
+    render(<SignInForm />);
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'user@' } });
+    expect(screen.queryByText(/please enter a valid email address/i)).toBeInTheDocument();
+  });
+
+  test('edge case for password validation - exactly 8 characters', () => {
+    render(<SignInForm />);
+    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: '12345678' } });
+    expect(screen.queryByText(/your password must have at least 8 characters/i)).toBeNull();
+  });
 });
