@@ -1,6 +1,72 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import SignInForm from './SignInForm';
+
+describe('SignInForm', () => {
+  test('validates email correctly', () => {
+    const { getByLabelText, queryByText } = render(<SignInForm />);
+    const emailInput = getByLabelText('Email');
+    
+    fireEvent.change(emailInput, { target: { value: 'invalidemail', name: 'email' } });
+    expect(queryByText('Please enter a valid email address')).toBeInTheDocument();
+
+    fireEvent.change(emailInput, { target: { value: 'valid@example.com', name: 'email' } });
+    expect(queryByText('Please enter a valid email address')).toBeNull();
+  });
+
+  test('validates password length correctly', () => {
+    const { getByLabelText, queryByText } = render(<SignInForm />);
+    const passwordInput = getByLabelText('Password');
+    
+    fireEvent.change(passwordInput, { target: { value: 'short', name: 'password' } });
+    expect(queryByText('Your password must have at least 8 characters')).toBeInTheDocument();
+
+    fireEvent.change(passwordInput, { target: { value: 'longenoughpassword', name: 'password' } });
+    expect(queryByText('Your password must have at least 8 characters')).toBeNull();
+  });
+
+  test('enables sign in button only when form is valid', () => {
+    const { getByLabelText, getByText } = render(<SignInForm />);
+    const emailInput = getByLabelText('Email');
+    const passwordInput = getByLabelText('Password');
+    const signInButton = getByText('Sign In').closest('button');
+
+    fireEvent.change(emailInput, { target: { value: 'valid@example.com', name: 'email' } });
+    fireEvent.change(passwordInput, { target: { value: 'longenoughpassword', name: 'password' } });
+    
+    expect(signInButton).not.toBeDisabled();
+  });
+
+  test('logs to console on valid form submission', () => {
+    console.log = jest.fn();
+    console.error = jest.fn();
+
+    const { getByLabelText, getByText } = render(<SignInForm />);
+    const emailInput = getByLabelText('Email');
+    const passwordInput = getByLabelText('Password');
+    const form = getByText('Sign In').closest('form');
+
+    fireEvent.change(emailInput, { target: { value: 'valid@example.com', name: 'email' } });
+    fireEvent.change(passwordInput, { target: { value: 'longenoughpassword', name: 'password' } });
+    fireEvent.submit(form);
+
+    expect(console.log).toHaveBeenCalledWith('Sign In submitted:', { email: 'valid@example.com', password: 'longenoughpassword' });
+    expect(console.error).not.toHaveBeenCalled();
+  });
+
+  test('logs error to console on invalid form submission', () => {
+    console.log = jest.fn();
+    console.error = jest.fn();
+
+    const { getByText } = render(<SignInForm />);
+    const form = getByText('Sign In').closest('form');
+
+    fireEvent.submit(form);
+
+    expect(console.error).toHaveBeenCalledWith('Sign In form is invalid');
+    expect(console.log).not.toHaveBeenCalled();
+  });
+});
 
 
 describe('SignInForm', () => {
