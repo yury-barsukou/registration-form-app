@@ -68,4 +68,42 @@ describe('SignInForm', () => {
 
     consoleSpy.mockRestore();
   });
+// Test for displaying validation messages upon invalid inputs
+test('displays validation messages for invalid email and password', () => {
+  render(<SignInForm />);
+  fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'invalid_email' } });
+  fireEvent.change(screen.getByLabelText(/password/i), { target: { value: '123' } });
+  fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+  expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument();
+  expect(screen.getByText(/your password must have at least 8 characters/i)).toBeInTheDocument();
+});
+
+// Test form submission with invalid inputs
+test('prevents form submission and shows errors with invalid email and password', () => {
+  const consoleErrorSpy = jest.spyOn(console, 'error');
+  render(<SignInForm />);
+
+  fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'invalid_email' } });
+  fireEvent.change(screen.getByLabelText(/password/i), { target: { value: '123' } });
+  fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+  expect(consoleErrorSpy).toHaveBeenCalledWith('Sign In form is invalid');
+  consoleErrorSpy.mockRestore();
+});
+
+// Test for "Forgot Password?" link
+test('"Forgot Password?" link is present and clickable', () => {
+  render(<SignInForm />);
+  expect(screen.getByText(/forgot password\?/i).closest('a')).toHaveAttribute('href', '#');
+});
+
+// Test form submission without filling fields
+test('prevents form submission with empty fields', () => {
+  render(<SignInForm />);
+  fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+  expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument();
+  expect(screen.getByText(/your password must have at least 8 characters/i)).toBeInTheDocument();
+});
 });
