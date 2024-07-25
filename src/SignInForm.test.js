@@ -68,4 +68,16 @@ describe('SignInForm', () => {
 
     consoleSpy.mockRestore();
   });
+
+  test('displays error message on submission failure', async () => {
+    const mockSubmitFailure = jest.fn(() => Promise.reject(new Error('Submission Failed')));
+    render(<SignInForm onSubmit={mockSubmitFailure} />);
+
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'user@example.com' } });
+    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+    // Assuming there's an element to display submission errors
+    await waitFor(() => expect(screen.getByTestId('submission-error')).toHaveTextContent('Submission Failed'));
+  });
 });
