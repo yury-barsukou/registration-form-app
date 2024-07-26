@@ -68,4 +68,61 @@ describe('SignInForm', () => {
 
     consoleSpy.mockRestore();
   });
+  describe('SignInForm - Empty Fields Submission', () => {
+  test('should prevent submission and display error when fields are empty', () => {
+    const { submitForm, getFieldError } = renderSignInForm();
+
+    submitForm();
+
+    expect(getFieldError('email')).toBe('Email is required');
+    expect(getFieldError('password')).toBe('Password is required');
+  });
+});
+
+describe('SignInForm - Server-side Failures', () => {
+  test('should display an error message on server-side failure', async () => {
+    mockSignInApiCall({ success: false, error: 'Invalid credentials' });
+
+    const { submitForm, getFormError } = renderSignInForm({
+      email: 'user@example.com',
+      password: 'password123',
+    });
+
+    await submitForm();
+
+    expect(getFormError()).toBe('Invalid credentials');
+  });
+});
+
+describe('SignInForm - Successful Submission', () => {
+  test('should submit form successfully', async () => {
+    mockSignInApiCall({ success: true });
+
+    const { submitForm, isSubmissionSuccessful } = renderSignInForm({
+      email: 'user@example.com',
+      password: 'correctPassword',
+    });
+
+    await submitForm();
+
+    expect(isSubmissionSuccessful()).toBe(true);
+  });
+});
+
+describe('SignInForm - Reset Functionality', () => {
+  test('should reset the form fields and errors', () => {
+    const { fillFormField, resetForm, getFormFieldValue, getFieldError } = renderSignInForm();
+
+    fillFormField('email', 'user@example.com');
+    fillFormField('password', '');
+    submitForm();
+
+    resetForm();
+
+    expect(getFormFieldValue('email')).toBe('');
+    expect(getFormFieldValue('password')).toBe('');
+    expect(getFieldError('email')).toBeUndefined();
+    expect(getFieldError('password')).toBeUndefined();
+  });
+});
 });
