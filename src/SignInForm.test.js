@@ -1,71 +1,49 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import SignInForm from './SignInForm';
 
-
-describe('SignInForm', () => {
-  test('renders the sign-in form with all fields', () => {
-    render(<SignInForm />);
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
+describe('SignInForm Component', () => {
+  test('updates email in state on email input change', () => {
+    const { getByLabelText } = render(<SignInForm />);
+    fireEvent.change(getByLabelText(/Email/i), { target: { value: 'user@example.com' } });
+    expect(getByLabelText(/Email/i).value).toBe('user@example.com');
   });
 
-  test('allows entry of email', () => {
-    render(<SignInForm />);
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'user@example.com' } });
-    expect(screen.getByLabelText(/email/i).value).toBe('user@example.com');
-  });
-
-  test('allows entry of password', () => {
-    render(<SignInForm />);
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
-    expect(screen.getByLabelText(/password/i).value).toBe('password123');
+  test('updates password in state on password input change', () => {
+    const { getByLabelText } = render(<SignInForm />);
+    fireEvent.change(getByLabelText(/Password/i), { target: { value: 'password123' } });
+    expect(getByLabelText(/Password/i).value).toBe('password123');
   });
 
   test('validates email format correctly', () => {
-    render(<SignInForm />);
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'invalid' } });
-    expect(screen.queryByText(/please enter a valid email address/i)).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'user@example.com' } });
-    expect(screen.queryByText(/please enter a valid email address/i)).toBeNull();
+    const { getByLabelText, queryByText } = render(<SignInForm />);
+    fireEvent.change(getByLabelText(/Email/i), { target: { value: 'invalid' } });
+    expect(queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+    fireEvent.change(getByLabelText(/Email/i), { target: { value: 'valid@example.com' } });
+    expect(queryByText(/Please enter a valid email address/i)).toBeNull();
   });
 
-  test('validates password length correctly', () => {
-    render(<SignInForm />);
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'short' } });
-    expect(screen.queryByText(/your password must have at least 8 characters/i)).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'longenough' } });
-    expect(screen.queryByText(/your password must have at least 8 characters/i)).toBeNull();
+  test('ensures password length is at least 8 characters', () => {
+    const { getByLabelText, queryByText } = render(<SignInForm />);
+    fireEvent.change(getByLabelText(/Password/i), { target: { value: 'short' } });
+    expect(queryByText(/Your password must have at least 8 characters/i)).toBeInTheDocument();
+    fireEvent.change(getByLabelText(/Password/i), { target: { value: 'longenoughpassword' } });
+    expect(queryByText(/Your password must have at least 8 characters/i)).toBeNull();
   });
 
-  test('disables sign-in button with invalid form', () => {
-    render(<SignInForm />);
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'invalid' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'short' } });
-    expect(screen.getByRole('button', { name: /sign in/i })).toBeDisabled();
+  test('prevents form submission when form is invalid', () => {
+    const { getByText, getByLabelText } = render(<SignInForm />);
+    fireEvent.change(getByLabelText(/Email/i), { target: { value: 'invalid' } });
+    fireEvent.change(getByLabelText(/Password/i), { target: { value: 'short' } });
+    fireEvent.click(getByText(/Sign In/i));
+    expect(console.error).toHaveBeenCalledWith('Sign In form is invalid');
   });
 
-  test('enables sign-in button with valid form', () => {
-    render(<SignInForm />);
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'user@example.com' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
-    expect(screen.getByRole('button', { name: /sign in/i })).not.toBeDisabled();
-  });
-
-  test('calls submit handler with correct data on valid form submission', () => {
-    const consoleSpy = jest.spyOn(console, 'log');
-    render(<SignInForm />);
-
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'user@example.com' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
-    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
-
-    expect(consoleSpy).toHaveBeenLastCalledWith('Sign In submitted:', {
-      email: 'user@example.com',
-      password: 'password123',
-    });
-
-    consoleSpy.mockRestore();
+  test('allows form submission when form is valid', () => {
+    console.log = jest.fn(); // Mocking console.log for this test
+    const { getByText, getByLabelText } = render(<SignInForm />);
+    fireEvent.change(getByLabelText(/Email/i), { target: { value: 'user@example.com' } });
+    fireEvent.change(getByLabelText(/Password/i), { target: { value: 'password123' } });
+    fireEvent.click(getByText(/Sign In/i));
+    expect(console.log).toHaveBeenCalledWith('Sign In submitted:', { email: 'user@example.com', password: 'password123' });
   });
 });
