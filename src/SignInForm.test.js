@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import SignInForm from './SignInForm';
 
-
 describe('SignInForm', () => {
   test('renders the sign-in form with all fields', () => {
     render(<SignInForm />);
@@ -67,5 +66,21 @@ describe('SignInForm', () => {
     });
 
     consoleSpy.mockRestore();
+  });
+
+  // Additional unit tests generated for enhance-signinform-unit-tests-v5
+  test('displays validation errors for empty email and short password on submission attempt', () => {
+    render(<SignInForm />);
+
+    // Attempt to submit the form with empty email and short password
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: '' } });
+    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'short' } });
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+    // Expect to see validation errors for both fields
+    expect(screen.queryByText(/please enter a valid email address/i)).toBeInTheDocument();
+    expect(screen.queryByText(/your password must have at least 8 characters/i)).toBeInTheDocument();
+    // Ensure the sign-in button remains disabled
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeDisabled();
   });
 });
