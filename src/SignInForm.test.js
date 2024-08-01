@@ -68,4 +68,37 @@ describe('SignInForm', () => {
 
     consoleSpy.mockRestore();
   });
+
+  test('renders the "Forgot Password?" link', () => {
+    render(<SignInForm />);
+    expect(screen.getByText('Forgot Password?')).toBeInTheDocument();
+  });
+
+  test('does not call submit handler with invalid form submission', () => {
+    const consoleSpy = jest.spyOn(console, 'log');
+    render(<SignInForm />);
+
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'invalid' } });
+    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'short' } });
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+    expect(consoleSpy).not.toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
+
+  test('validates email with edge case formats', () => {
+    render(<SignInForm />);
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'example@domain' } });
+    expect(screen.queryByText(/please enter a valid email address/i)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'example@domain.com' } });
+    expect(screen.queryByText(/please enter a valid email address/i)).toBeNull();
+  });
+
+  test('validates password with boundary condition', () => {
+    render(<SignInForm />);
+    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: '1234567' } });
+    expect(screen.queryByText(/your password must have at least 8 characters/i)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: '12345678' } });
+    expect(screen.queryByText(/your password must have at least 8 characters/i)).toBeNull();
+  });
 });
