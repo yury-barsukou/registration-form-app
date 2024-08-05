@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import SignInForm from './SignInForm';
+import SignInForm from '../SignInForm';
 
 
 describe('SignInForm', () => {
