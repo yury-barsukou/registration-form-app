@@ -59,7 +59,7 @@ describe('SignUpForm', () => {
   });
 
   test('does not submit form with missing password', () => {
-    const consoleSpy is a jest.spyOn(console, 'log');
+    const consoleSpy = jest.spyOn(console, 'log');
     render(<SignUpForm />);
 
     fireEvent.change(screen.getByLabelText(/first name/i), { target: { value: 'John' } });
