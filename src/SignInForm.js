@@ -16,7 +16,7 @@ const SignInForm = () => {
     if (name === 'email') {
       validateEmail(value);
     } else if (name === 'password') {
-      setIsSignInPasswordValid(value.length >= 8);
+      setIsSignInPasswordValid(value.length >= 10);
     }
   };
 
