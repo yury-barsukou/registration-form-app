@@ -34,9 +34,9 @@ describe('SignInForm', () => {
   test('validates password length correctly', () => {
     render(<SignInForm />);
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'short' } });
-    expect(screen.queryByText(/your password must have at least 8 characters/i)).toBeInTheDocument();
+    expect(screen.queryByText(/your password must have at least 10 characters/i)).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'longenough' } });
-    expect(screen.queryByText(/your password must have at least 8 characters/i)).toBeNull();
+    expect(screen.queryByText(/your password must have at least 10 characters/i)).toBeNull();
   });
 
   test('disables sign-in button with invalid form', () => {
