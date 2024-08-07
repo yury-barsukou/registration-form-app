@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import SignUpForm from './SignUpForm';
+import SignUpForm from '../SignUpForm';
 
 describe('SignUpForm', () => {
   test('inputs should update the form state', () => {
