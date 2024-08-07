@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import SignInForm from './SignInForm';
+import SignInForm from '../SignInForm';
 
 describe('SignInForm', () => {
   beforeEach(() => {
