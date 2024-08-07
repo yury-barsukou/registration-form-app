@@ -122,7 +122,8 @@ const SignUpForm = () => {
         <div className="password-validation">
           <p>Password must contain the following:</p>
           <ul>
-            {/*The labels change their color from red to green if a password satisfies particular criteria*/}
+            {/*These labels always present in DOM and change their color 
+            from red to green if a password satisfies particular criteria*/}
             <li className={passwordValidations.hasUppercase ? 'green' : 'red'}>
               1 uppercase character
             </li>
