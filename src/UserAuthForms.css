@@ -68,11 +68,11 @@
     padding: 0;
   }
   
-  .password-validation li.valid {
+  .password-validation li.green {
     color: green;
   }
   
-  .password-validation li.invalid {
+  .password-validation li.red {
     color: red;
   }
   

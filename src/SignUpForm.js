@@ -47,6 +47,7 @@ const SignUpForm = () => {
     return (
       formData.firstName &&
       formData.lastName &&
+      formData.email &&
       isEmailValid &&
       Object.values(passwordValidations).every(Boolean)
     );
@@ -121,16 +122,17 @@ const SignUpForm = () => {
         <div className="password-validation">
           <p>Password must contain the following:</p>
           <ul>
-            <li className={passwordValidations.hasUppercase ? 'valid' : 'invalid'}>
+            {/*The labels change their color from red to green if a password satisfies particular criteria*/}
+            <li className={passwordValidations.hasUppercase ? 'green' : 'red'}>
               1 uppercase character
             </li>
-            <li className={passwordValidations.hasLowercase ? 'valid' : 'invalid'}>
+            <li className={passwordValidations.hasLowercase ? 'green' : 'red'}>
               1 lowercase character
             </li>
-            <li className={passwordValidations.hasNumber ? 'valid' : 'invalid'}>
+            <li className={passwordValidations.hasNumber ? 'green' : 'red'}>
               1 number
             </li>
-            <li className={passwordValidations.isLongEnough ? 'valid' : 'invalid'}>
+            <li className={passwordValidations.isLongEnough ? 'green' : 'red'}>
               Minimum 8 characters
             </li>
           </ul>
