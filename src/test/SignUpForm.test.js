@@ -1,82 +1,100 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import SignUpForm from '../SignUpForm';
 
+const LABELS = {
+  firstName: /First Name/i,
+  lastName: /Last Name/i,
+  email: /Email/i,
+  password: /Password/i,
+};
+
+const BUTTON_TEXT = /Create Account/i;
+const VALID_EMAIL = 'john.doe@example.com';
+const VALID_PASSWORD = 'Password123';
+
+const fillOutForm = (overrides = {}) => {
+  const formData = {
+    firstName: 'John',
+    lastName: 'Doe',
+    email: VALID_EMAIL,
+    password: VALID_PASSWORD,
+    ...overrides,
+  };
+
+  fireEvent.change(screen.getByLabelText(LABELS.firstName), { target: { value: formData.firstName } });
+  fireEvent.change(screen.getByLabelText(LABELS.lastName), { target: { value: formData.lastName } });
+  fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: formData.email } });
+  fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: formData.password } });
+
+  return formData;
+};
+
 describe('SignUpForm', () => {
+  beforeEach(() => {
+    render(<SignUpForm />);
+  });
+
   test('renders the sign-up form with all fields', () => {
-    render(<SignUpForm />);
-    expect(screen.getByLabelText(/First Name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Last Name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Create Account/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(LABELS.firstName)).toBeInTheDocument();
+    expect(screen.getByLabelText(LABELS.lastName)).toBeInTheDocument();
+    expect(screen.getByLabelText(LABELS.email)).toBeInTheDocument();
+    expect(screen.getByLabelText(LABELS.password)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeInTheDocument();
   });
 
-  test.each([
-    { label: 'First Name', value: 'John' },
-    { label: 'Last Name', value: 'Doe' },
-    { label: 'Email', value: 'john.doe@example.com' },
-    { label: 'Password', value: 'Password123' },
-  ])('allows entry of $label', ({ label, value }) => {
-    render(<SignUpForm />);
-    fireEvent.change(screen.getByLabelText(new RegExp(label, 'i')), { target: { value } });
-    expect(screen.getByLabelText(new RegExp(label, 'i')).value).toBe(value);
+  describe('Field Entry', () => {
+    test.each(Object.entries(LABELS))('allows entry of %s', (fieldName, labelRegex) => {
+      const value = 'TestValue';
+      fireEvent.change(screen.getByLabelText(labelRegex), { target: { value } });
+      expect(screen.getByLabelText(labelRegex)).toHaveValue(value);
+    });
   });
 
-  test('validates email format correctly', () => {
-    render(<SignUpForm />);
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'invalid' } });
-    expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john.doe@example.com' } });
-    expect(screen.queryByText(/Please enter a valid email address/i)).toBeNull();
-  });
-
-  test('validates password criteria correctly', () => {
-    render(<SignUpForm />);
-    const password = screen.getByLabelText(/Password/i);
-    fireEvent.change(password, { target: { value: 'short' } });
-    expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
-    fireEvent.change(password, { target: { value: 'LongEnough1' } });
-    expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
-    expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
-    expect(screen.getByText(/1 number/i).className).toMatch(/green/);
-    expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
-  });
-
-  test('enables Create Account button with valid form', () => {
-    render(<SignUpForm />);
-    fireEvent.change(screen.getByLabelText(/First Name/i), { target: { value: 'John' } });
-    fireEvent.change(screen.getByLabelText(/Last Name/i), { target: { value: 'Doe' } });
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john.doe@example.com' } });
-    fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: 'Password123' } });
-    expect(screen.getByRole('button', { name: /Create Account/i })).not.toBeDisabled();
-  });
-
-  test('disables Create Account button with invalid form', () => {
-    render(<SignUpForm />);
-    fireEvent.change(screen.getByLabelText(/First Name/i), { target: { value: '' } }); // Leaving first name empty
-    fireEvent.change(screen.getByLabelText(/Last Name/i), { target: { value: 'Doe' } });
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john.doe@example.com' } });
-    fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: 'Password123' } });
-    expect(screen.getByRole('button', { name: /Create Account/i })).toBeDisabled();
-  });
-
-  test('calls console log with correct data on valid form submission', () => {
-    const consoleSpy = jest.spyOn(console, 'log');
-    render(<SignUpForm />);
-
-    fireEvent.change(screen.getByLabelText(/First Name/i), { target: { value: 'John' } });
-    fireEvent.change(screen.getByLabelText(/Last Name/i), { target: { value: 'Doe' } });
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john.doe@example.com' } });
-    fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: 'Password123' } });
-    fireEvent.click(screen.getByRole('button', { name: /Create Account/i }));
-
-    expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      password: 'Password123',
+  describe('Form Validation', () => {
+    test('validates email format correctly', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'invalid' } });
+      expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: VALID_EMAIL } });
+      expect(screen.queryByText(/Please enter a valid email address/i)).toBeNull();
     });
 
-    consoleSpy.mockRestore();
+    test('validates password criteria correctly', () => {
+      const password = screen.getByLabelText(LABELS.password);
+      fireEvent.change(password, { target: { value: 'short' } });
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
+      fireEvent.change(password, { target: { value: 'LongEnough1' } });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 number/i).className).toMatch(/green/);
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+    });
+  });
+
+  describe('Form Submission', () => {
+    let consoleSpy;
+
+    beforeEach(() => {
+      consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      consoleSpy.mockRestore();
+    });
+
+    test('enables Create Account button with valid form', () => {
+      fillOutForm();
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
+    });
+
+    test('disables Create Account button with invalid form', () => {
+      fillOutForm({ firstName: '' }); // Explicitly set an invalid field
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('calls console log with correct data on valid form submission', () => {
+      const formData = fillOutForm();
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+    });
   });
 });
