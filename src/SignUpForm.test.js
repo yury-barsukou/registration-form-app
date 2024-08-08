@@ -98,3 +98,66 @@ describe('SignUpForm', () => {
     });
   });
 });
+
+describe('SignUpForm Additional Tests', () => {
+  beforeEach(() => {
+    render(<SignUpForm />);
+  });
+
+  describe('Edge Cases', () => {
+    test('should display error for empty email input', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: '' } });
+      expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+    });
+
+    test.each([
+      { password: 'onlylowercase', expected: 'red' },
+      { password: 'ONLYUPPERCASE', expected: 'red' },
+      { password: '12345678', expected: 'red' },
+      { password: 'LowerAnd123', expected: 'red' },
+      { password: 'UPPERAND123', expected: 'red' },
+      { password: 'lowerUPPER', expected: 'red' },
+      { password: 'ValidPassword1', expected: 'green' },
+    ])('validates complex password criteria ($password)', ({ password, expected }) => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: password } });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(expected);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(expected);
+      expect(screen.getByText(/1 number/i).className).toMatch(expected);
+    });
+
+    test('should display error for email without domain', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'user@' } });
+      expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+    });
+
+    test('should display error for email without "@" symbol', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'user.example.com' } });
+      expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+    });
+
+    test('should not log to console when form is invalid on submission', () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      fillOutForm({ email: 'invalid' }); // Invalid email
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).toHaveBeenLastCalledWith('Form is invalid');
+      consoleSpy.mockRestore();
+    });
+
+    test('firstName and lastName fields should accept maximum of 50 characters', () => {
+      const longString = 'a'.repeat(51);
+      const validString = 'a'.repeat(50);
+
+      fireEvent.change(screen.getByLabelText(LABELS.firstName), { target: { value: longString } });
+      expect(screen.getByLabelText(LABELS.firstName).value.length).toBe(50);
+
+      fireEvent.change(screen.getByLabelText(LABELS.lastName), { target: { value: longString } });
+      expect(screen.getByLabelText(LABELS.lastName).value.length).toBe(50);
+
+      fireEvent.change(screen.getByLabelText(LABELS.firstName), { target: { value: validString } });
+      expect(screen.getByLabelText(LABELS.firstName).value).toBe(validString);
+
+      fireEvent.change(screen.getByLabelText(LABELS.lastName), { target: { value: validString } });
+      expect(screen.getByLabelText(LABELS.lastName).value).toBe(validString);
+    });
+  });
+});
