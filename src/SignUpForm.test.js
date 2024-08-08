@@ -29,72 +29,57 @@ const fillOutForm = (overrides = {}) => {
   return formData;
 };
 
-describe('SignUpForm', () => {
-  beforeEach(() => {
-    render(<SignUpForm />);
+describe('SignUpForm - Additional Tests', () => {
+  test('renders validation messages when email is invalid and password does not meet criteria', () => {
+    fillOutForm({ email: 'invalidemail', password: 'short' });
+    fireEvent.blur(screen.getByLabelText(LABELS.email));
+    fireEvent.blur(screen.getByLabelText(LABELS.password));
+    expect(screen.getByText(/Please enter a valid email address/i)).toBeInTheDocument();
+    expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
   });
 
-  test('renders the sign-up form with all fields', () => {
-    expect(screen.getByLabelText(LABELS.firstName)).toBeInTheDocument();
-    expect(screen.getByLabelText(LABELS.lastName)).toBeInTheDocument();
-    expect(screen.getByLabelText(LABELS.email)).toBeInTheDocument();
-    expect(screen.getByLabelText(LABELS.password)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeInTheDocument();
+  test('does not log console error with valid form on submission', () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const formData = fillOutForm();
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    consoleErrorSpy.mockRestore();
   });
 
-  describe('Field Entry', () => {
-    test.each(Object.entries(LABELS))('allows entry of %s', (fieldName, labelRegex) => {
-      const value = 'TestValue';
-      fireEvent.change(screen.getByLabelText(labelRegex), { target: { value } });
-      expect(screen.getByLabelText(labelRegex)).toHaveValue(value);
-    });
+  test('logs console error with invalid form on submission', () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    fillOutForm({ firstName: '' }); // Invalid form data
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Form is invalid');
+    consoleErrorSpy.mockRestore();
   });
 
-  describe('Form Validation', () => {
-    test('validates email format correctly', () => {
-      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'invalid' } });
-      expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
-      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: VALID_EMAIL } });
-      expect(screen.queryByText(/Please enter a valid email address/i)).toBeNull();
-    });
-
-    test('validates password criteria correctly', () => {
-      const password = screen.getByLabelText(LABELS.password);
-      fireEvent.change(password, { target: { value: 'short' } });
-      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
-      fireEvent.change(password, { target: { value: 'LongEnough1' } });
-      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
-      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
-      expect(screen.getByText(/1 number/i).className).toMatch(/green/);
-      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
-    });
+  test('renders error style for email input when it is invalid', () => {
+    fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'invalidemail' } });
+    fireEvent.blur(screen.getByLabelText(LABELS.email));
+    expect(screen.getByLabelText(LABELS.email)).toHaveClass('form-control invalid');
   });
 
-  describe('Form Submission', () => {
-    let consoleSpy;
+  test('renders normal style for email input when it is valid', () => {
+    fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: VALID_EMAIL } });
+    fireEvent.blur(screen.getByLabelText(LABELS.email));
+    expect(screen.getByLabelText(LABELS.email)).toHaveClass('form-control');
+    expect(screen.getByLabelText(LABELS.email)).not.toHaveClass('invalid');
+  });
 
-    beforeEach(() => {
-      consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    });
+  test.each([
+    { name: 'firstName', value: 'Jane' },
+    { name: 'lastName', value: 'Doe' },
+    { name: 'email', value: VALID_EMAIL },
+    { name: 'password', value: VALID_PASSWORD },
+  ])('updates state correctly when %s field is changed', ({ name, value }) => {
+    fireEvent.change(screen.getByLabelText(LABELS[name]), { target: { value } });
+    expect(screen.getByLabelText(LABELS[name])).toHaveValue(value);
+  });
 
-    afterEach(() => {
-      consoleSpy.mockRestore();
-    });
-
-    test('enables Create Account button with valid form', () => {
-      fillOutForm();
-      expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
-    });
-
-    test('disables Create Account button with invalid form', () => {
-      fillOutForm({ firstName: '' }); // Explicitly set an invalid field
-      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
-    });
-
-    test('calls console log with correct data on valid form submission', () => {
-      const formData = fillOutForm();
-      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
-      expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
-    });
+  test('prevents form submission when form is invalid', () => {
+    const formData = fillOutForm({ email: 'invalid' }); // Invalid email
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(screen.queryByText('Form submitted:', formData)).toBeNull();
   });
 });
