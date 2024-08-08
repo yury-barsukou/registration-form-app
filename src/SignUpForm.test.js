@@ -29,6 +29,106 @@ const fillOutForm = (overrides = {}) => {
   return formData;
 };
 
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import SignUpForm from './SignUpForm';
+
+describe('SignUpForm', () => {
+    beforeEach(() => {
+        render(<SignUpForm />);
+    });
+
+    const typeIntoForm = ({ email, firstName, lastName, password }) => {
+        const emailInputElement = screen.getByLabelText(/email/i);
+        const firstNameInputElement = screen.getByLabelText(/first name/i);
+        const lastNameInputElement = screen.getByLabelText(/last name/i);
+        const passwordInputElement = screen.getByLabelText(/password/i);
+
+        if (email) fireEvent.change(emailInputElement, { target: { value: email } });
+        if (firstName) fireEvent.change(firstNameInputElement, { target: { value: firstName } });
+        if (lastName) fireEvent.change(lastNameInputElement, { target: { value: lastName } });
+        if (password) fireEvent.change(passwordInputElement, { target: { value: password } });
+    };
+
+    it('renders correctly', () => {
+        expect(screen.getByLabelText(/first name/i)).toBeInTheDocument();
+        expect(screen.getByLabelText(/last name/i)).toBeInTheDocument();
+        expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+        expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /create account/i })).toBeInTheDocument();
+    });
+
+    it('validates email correctly', () => {
+        typeIntoForm({ email: 'invalidemail' });
+        expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument();
+        typeIntoForm({ email: 'validemail@example.com' });
+        expect(screen.queryByText(/please enter a valid email address/i)).not.toBeInTheDocument();
+    });
+
+    describe('validates password correctly', () => {
+        it.each([
+            ['password', false],
+            ['Password', false],
+            ['password1', false],
+            ['Password1', true],
+        ])('for "%s" as password, the validation result should be %s', (password, isValid) => {
+            typeIntoForm({ password });
+            const submitButton = screen.getByRole('button', { name: /create account/i });
+            if (isValid) {
+                expect(submitButton).not.toHaveClass('btn-disabled');
+            } else {
+                expect(submitButton).toHaveClass('btn-disabled');
+            }
+        });
+    });
+
+    it('enables submit button when the form is valid', () => {
+        typeIntoForm({
+            email: 'test@example.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            password: 'Password1',
+        });
+        expect(screen.getByRole('button', { name: /create account/i })).not.toHaveClass('btn-disabled');
+    });
+
+    it('keeps submit button disabled when the form is invalid', () => {
+        typeIntoForm({
+            email: 'test@example.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            password: 'pass',
+        });
+        expect(screen.getByRole('button', { name: /create account/i })).toHaveClass('btn-disabled');
+    });
+
+    it('submits the form with valid data', () => {
+        const consoleSpy = jest.spyOn(console, 'log');
+        typeIntoForm({
+            email: 'test@example.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            password: 'Password1',
+        });
+        fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+        expect(consoleSpy).toHaveBeenCalledWith('Form submitted:', expect.any(Object));
+        consoleSpy.mockRestore();
+    });
+
+    it('does not submit the form with invalid data', () => {
+        const consoleErrorSpy = jest.spyOn(console, 'error');
+        typeIntoForm({
+            email: 'test@example.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            password: 'pass',
+        });
+        fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+        expect(consoleErrorSpy).toHaveBeenCalledWith('Form is invalid');
+        consoleErrorSpy.mockRestore();
+    });
+});
+
 describe('SignUpForm', () => {
   beforeEach(() => {
     render(<SignUpForm />);
