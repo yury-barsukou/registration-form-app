@@ -98,3 +98,85 @@ describe('SignUpForm', () => {
     });
   });
 });
+describe('SignUpForm - Additional Tests', () => {
+  beforeEach(() => {
+    render(<SignUpForm />);
+  });
+
+  // Testing password validation for various edge cases
+  describe('Password Validation Edge Cases', () => {
+    const testCases = [
+      { password: 'alllowercase', expected: 'red' },
+      { password: 'ALLUPPERCASE', expected: 'red' },
+      { password: '12345678', expected: 'red' },
+      { password: 'LowerAnd123', expected: 'red' },
+      { password: 'UPPERand123', expected: 'red' },
+      { password: 'LowerUPPER', expected: 'red' },
+      { password: 'LowerUPPER123', expected: 'green' },
+      { password: 'aB1', expected: 'red' }, // Not long enough
+    ];
+
+    testCases.forEach(({ password, expected }) => {
+      test(`"${password}" validation classes`, () => {
+        fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: password } });
+        expect(screen.getByText(/1 uppercase character/i).className).toMatch(expected);
+        expect(screen.getByText(/1 lowercase character/i).className).toMatch(expected);
+        expect(screen.getByText(/1 number/i).className).toMatch(expected);
+        expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(password.length >= 8 ? 'green' : 'red');
+      });
+    });
+  });
+
+  // Testing email validation for various edge cases
+  describe('Email Validation Edge Cases', () => {
+    const emailTestCases = [
+      { email: 'simple@example.com', isValid: true },
+      { email: 'very.common@example.com', isValid: true },
+      { email: 'disposable.style.email.with+symbol@example.com', isValid: true },
+      { email: 'other.email-with-hyphen@example.com', isValid: true },
+      { email: 'fully-qualified-domain@example.com', isValid: true },
+      { email: 'user.name+tag+sorting@example.com', isValid: true },
+      { email: 'x@example.com', isValid: true },
+      { email: 'example-indeed@strange-example.com', isValid: true },
+      { email: 'test@test.com', isValid: true },
+      { email: 'admin@mailserver1', isValid: false },
+      { email: 'example@s.solutions', isValid: true },
+      { email: 'john.doe@example..com', isValid: false },
+      { email: 'abc', isValid: false },
+      { email: '@example.com', isValid: false },
+    ];
+
+    emailTestCases.forEach(({ email, isValid }) => {
+      test(`"${email}" - is valid: ${isValid}`, () => {
+        fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: email } });
+        if (isValid) {
+          expect(screen.queryByText(/Please enter a valid email address/i)).toBeNull();
+        } else {
+          expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+        }
+      });
+    });
+  });
+
+  // Testing form validation with different combinations of valid/invalid inputs
+  describe('Form Validation with Mixed Inputs', () => {
+    const formTestCases = [
+      { data: { firstName: 'John', lastName: 'Doe', email: 'invalid', password: VALID_PASSWORD }, isValid: false },
+      { data: { firstName: '', lastName: 'Doe', email: VALID_EMAIL, password: VALID_PASSWORD }, isValid: false },
+      { data: { firstName: 'John', lastName: '', email: VALID_EMAIL, password: VALID_PASSWORD }, isValid: false },
+      { data: { firstName: 'John', lastName: 'Doe', email: VALID_EMAIL, password: 'short' }, isValid: false },
+      { data: { firstName: 'John', lastName: 'Doe', email: 'john.doe@example.com', password: 'Password123' }, isValid: true },
+    ];
+
+    formTestCases.forEach(({ data, isValid }, index) => {
+      test(`Form validation with testCase #${index + 1} - Expected isValid: ${isValid}`, () => {
+        fillOutForm(data);
+        if (isValid) {
+          expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
+        } else {
+          expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+        }
+      });
+    });
+  });
+});
