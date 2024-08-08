@@ -11,6 +11,7 @@ const LABELS = {
 const BUTTON_TEXT = /Create Account/i;
 const VALID_EMAIL = 'john.doe@example.com';
 const VALID_PASSWORD = 'Password123';
+const SHORT_PASSWORD = 'short'
 
 const fillOutForm = (overrides = {}) => {
   const formData = {
