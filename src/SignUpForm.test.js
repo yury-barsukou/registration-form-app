@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import SignUpForm from '../SignUpForm';
+import SignUpForm from './SignUpForm';
 
 const LABELS = {
   firstName: /First Name/i,
