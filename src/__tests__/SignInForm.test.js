@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import SignInForm from './SignInForm';
+import SignInForm from '../SignInForm';
 
 describe('SignInForm', () => {
   it('should render without crashing', () => {
