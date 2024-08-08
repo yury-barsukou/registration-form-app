@@ -96,5 +96,17 @@ describe('SignUpForm', () => {
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
     });
+    
+    test('does not submit form with invalid email', () => {
+      const formData = fillOutForm({ email: INVALID_EMAIL });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
+    });
+
+    test('does not submit form with password missing criteria', () => {
+      const formData = fillOutForm({ password: SHORT_PASSWORD });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
+    });
   });
 });
