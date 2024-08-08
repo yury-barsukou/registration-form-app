@@ -98,3 +98,59 @@ describe('SignUpForm', () => {
     });
   });
 });
+
+describe('Password and Email edge cases', () => {
+  beforeEach(() => {
+    render(<SignUpForm />);
+  });
+
+  test('password with only uppercase characters is invalid', () => {
+    fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'PASSWORD' } });
+    expect(screen.getByText(/1 lowercase character/i).className).toMatch(/red/);
+    expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+  });
+
+  test('password with only lowercase characters is invalid', () => {
+    fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'password' } });
+    expect(screen.getByText(/1 uppercase character/i).className).toMatch(/red/);
+    expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+  });
+
+  test('password with letters but no numbers is invalid', () => {
+    fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'Password' } });
+    expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+  });
+
+  test('password with numbers but no letters is invalid', () => {
+    fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: '12345678' } });
+    expect(screen.getByText(/1 uppercase character/i).className).toMatch(/red/);
+    expect(screen.getByText(/1 lowercase character/i).className).toMatch(/red/);
+  });
+
+  test('email without @ symbol is invalid', () => {
+    fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'invalidemail.com' } });
+    expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+  });
+
+  test('email without domain is invalid', () => {
+    fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'invalid@' } });
+    expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+  });
+
+  test('email with invalid characters is invalid', () => {
+    fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'invalid@e#mail.com' } });
+    expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+  });
+});
+
+describe('Empty Fields Validation', () => {
+  beforeEach(() => {
+    render(<SignUpForm />);
+  });
+
+  test.each(Object.entries(LABELS))('submitting form with empty %s field displays error', (fieldName, labelRegex) => {
+    const formData = fillOutForm({ [fieldName]: '' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+  });
+});
