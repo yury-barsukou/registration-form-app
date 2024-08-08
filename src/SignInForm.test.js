@@ -94,4 +94,4 @@ describe('SignInForm', () => {
       expect(forgotPasswordLink).toHaveAttribute('tabIndex', '0');
     });
   });
-};
+});
