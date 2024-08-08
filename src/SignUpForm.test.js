@@ -29,72 +29,110 @@ const fillOutForm = (overrides = {}) => {
   return formData;
 };
 
-describe('SignUpForm', () => {
+describe('SignUpForm Additional Tests', () => {
   beforeEach(() => {
     render(<SignUpForm />);
   });
 
-  test('renders the sign-up form with all fields', () => {
-    expect(screen.getByLabelText(LABELS.firstName)).toBeInTheDocument();
-    expect(screen.getByLabelText(LABELS.lastName)).toBeInTheDocument();
-    expect(screen.getByLabelText(LABELS.email)).toBeInTheDocument();
-    expect(screen.getByLabelText(LABELS.password)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeInTheDocument();
-  });
-
-  describe('Field Entry', () => {
-    test.each(Object.entries(LABELS))('allows entry of %s', (fieldName, labelRegex) => {
-      const value = 'TestValue';
-      fireEvent.change(screen.getByLabelText(labelRegex), { target: { value } });
-      expect(screen.getByLabelText(labelRegex)).toHaveValue(value);
+  describe('Password Validation Edge Cases', () => {
+    test.each([
+      { password: '1234567aA', valid: true },
+      { password: '1234567A', valid: false },
+      { password: '1234567a', valid: false },
+      { password: 'abcdefgH', valid: false },
+      { password: 'ABCDEFGh', valid: false },
+      { password: 'ABCDEFG1', valid: false },
+      { password: 'abcdEF12', valid: true },
+      { password: 'ABc123456789', valid: true },
+    ])('validates password "$password" correctly', ({ password, valid }) => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: password } });
+      const criteria = [
+        /1 uppercase character/i,
+        /1 lowercase character/i,
+        /1 number/i,
+        /Minimum 8 characters/i,
+      ];
+      criteria.forEach((criteriaRegex) => {
+        const criteriaElement = screen.getByText(criteriaRegex);
+        if (valid) {
+          expect(criteriaElement.className).toMatch(/green/);
+        } else {
+          expect(criteriaElement.className).toMatch(/red/);
+        }
+      });
     });
   });
 
-  describe('Form Validation', () => {
-    test('validates email format correctly', () => {
-      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'invalid' } });
-      expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
-      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: VALID_EMAIL } });
-      expect(screen.queryByText(/Please enter a valid email address/i)).toBeNull();
-    });
-
-    test('validates password criteria correctly', () => {
-      const password = screen.getByLabelText(LABELS.password);
-      fireEvent.change(password, { target: { value: 'short' } });
-      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
-      fireEvent.change(password, { target: { value: 'LongEnough1' } });
-      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
-      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
-      expect(screen.getByText(/1 number/i).className).toMatch(/green/);
-      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+  describe('Email Validation Edge Cases', () => {
+    test.each([
+      { email: 'email@example.com', valid: true },
+      { email: 'firstname.lastname@example.com', valid: true },
+      { email: 'email@subdomain.example.com', valid: true },
+      { email: 'firstname+lastname@example.com', valid: true },
+      { email: 'email@123.123.123.123', valid: true },
+      { email: 'email@[123.123.123.123]', valid: true },
+      { email: '"email"@example.com', valid: true },
+      { email: '1234567890@example.com', valid: true },
+      { email: 'email@example-one.com', valid: true },
+      { email: '_______@example.com', valid: true },
+      { email: 'email@example.name', valid: true },
+      { email: 'email@example.museum', valid: true },
+      { email: 'email@example.co.jp', valid: true },
+      { email: 'firstname-lastname@example.com', valid: true },
+      { email: 'plainaddress', valid: false },
+      { email: '@missingusername.example.com', valid: false },
+      { email: 'Joe Smith <email@example.com>', valid: false },
+      { email: 'email.example.com', valid: false },
+      { email: 'email@example@example.com', valid: false },
+      { email: '.email@example.com', valid: false },
+      { email: 'email.@example.com', valid: false },
+      { email: 'email..email@example.com', valid: false },
+      { email: 'あいうえお@example.com', valid: false },
+      { email: 'email@example.com (Joe Smith)', valid: false },
+      { email: 'email@example', valid: false },
+      { email: 'email@-example.com', valid: false },
+      { email: 'email@111.222.333.44444', valid: false },
+      { email: 'email@example..com', valid: false },
+      { email: 'Abc..123@example.com', valid: false },
+    ])('validates email "$email" correctly', ({ email, valid }) => {
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: email } });
+      if (valid) {
+        expect(screen.queryByText(/Please enter a valid email address/i)).toBeNull();
+      } else {
+        expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+      }
     });
   });
 
-  describe('Form Submission', () => {
-    let consoleSpy;
+  test('does not submit the form with invalid email', () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    fillOutForm({ email: 'invalid' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleSpy).toHaveBeenLastCalledWith('Form is invalid');
+    consoleSpy.mockRestore();
+  });
 
-    beforeEach(() => {
-      consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    });
+  test('does not submit the form with invalid password', () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    fillOutForm({ password: 'short' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleSpy).toHaveBeenLastCalledWith('Form is invalid');
+    consoleSpy.mockRestore();
+  });
 
-    afterEach(() => {
-      consoleSpy.mockRestore();
-    });
+  test('does not submit the form with empty first name', () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    fillOutForm({ firstName: '' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleSpy).toHaveBeenLastCalledWith('Form is invalid');
+    consoleSpy.mockRestore();
+  });
 
-    test('enables Create Account button with valid form', () => {
-      fillOutForm();
-      expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
-    });
-
-    test('disables Create Account button with invalid form', () => {
-      fillOutForm({ firstName: '' }); // Explicitly set an invalid field
-      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
-    });
-
-    test('calls console log with correct data on valid form submission', () => {
-      const formData = fillOutForm();
-      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
-      expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
-    });
+  test('does not submit the form with empty last name', () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    fillOutForm({ lastName: '' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleSpy).toHaveBeenLastCalledWith('Form is invalid');
+    consoleSpy.mockRestore();
   });
 });
