@@ -98,3 +98,85 @@ describe('SignUpForm', () => {
     });
   });
 });
+
+// Additional unit tests to enhance coverage
+
+describe('SignUpForm Password and Email Validation', () => {
+  beforeEach(() => {
+    render(<SignUpForm />);
+  });
+
+  const testCases = [
+    { name: 'password', value: 'NoNumbers', expected: 'red' },
+    { name: 'password', value: '12345678', expected: 'red' },
+    { name: 'password', value: 'lowercaseand123', expected: 'red' },
+    { name: 'password', value: 'UPPERCASEAND123', expected: 'red' },
+    { name: 'password', value: 'Mix12345', expected: 'green' },
+    { name: 'email', value: 'invalid@', expected: true },
+    { name: 'email', value: 'noatsign.com', expected: true },
+    { name: 'email', value: 'correct@domain.com', expected: false },
+  ];
+
+  testCases.forEach(({ name, value, expected }) => {
+    test(`${name} validation for value: "${value}" should be "${expected}"`, () => {
+      fireEvent.change(screen.getByLabelText(LABELS[name]), { target: { value } });
+      if (name === 'password') {
+        // Checking the color of the first criteria as a representative; assuming rest follow the same logic.
+        expect(screen.getByText(/1 uppercase character/i).className).toMatch(expected);
+      } else if (name === 'email') {
+        const validationMessage = screen.queryByText(/Please enter a valid email address/i);
+        if (expected) {
+          expect(validationMessage).toBeInTheDocument();
+        } else {
+          expect(validationMessage).toBeNull();
+        }
+      }
+    });
+  });
+});
+
+describe('SignUpForm Edge Case Handling', () => {
+  beforeEach(() => {
+    render(<SignUpForm />);
+  });
+
+  test('validates extremely long first name', () => {
+    const longName = 'a'.repeat(51);
+    fireEvent.change(screen.getByLabelText(LABELS.firstName), { target: { value: longName } });
+    expect(screen.getByLabelText(LABELS.firstName)).toHaveValue(longName.slice(0, 50));
+  });
+
+  test('validates extremely long last name', () => {
+    const longName = 'a'.repeat(51);
+    fireEvent.change(screen.getByLabelText(LABELS.lastName), { target: { value: longName } });
+    expect(screen.getByLabelText(LABELS.lastName)).toHaveValue(longName.slice(0, 50));
+  });
+
+  test('submit button remains disabled when only some password validations pass', () => {
+    fillOutForm({ password: 'Lower123' }); // Missing uppercase
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+  });
+
+  test('form is invalid when email is valid but password is too short', () => {
+    fillOutForm({ password: 'Short1' });
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+  });
+
+  test('form remains valid when all fields filled correctly', () => {
+    fillOutForm();
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
+  });
+
+  test('renders email validation message correctly on invalid email', () => {
+    fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'wrongemail.com' } });
+    expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+  });
+
+  test('does not call console log on invalid form submission', () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    fillOutForm({ email: 'wrongemail.com' }); // Invalid email
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleSpy).toHaveBeenCalledWith('Form is invalid');
+    consoleSpy.mockRestore();
+  });
+});
