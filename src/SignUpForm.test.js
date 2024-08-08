@@ -97,4 +97,24 @@ describe('SignUpForm', () => {
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
     });
   });
+
+  // Additional tests
+  test('validates empty first name and last name correctly', () => {
+    fillOutForm({ firstName: '', lastName: '' });
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+  });
+
+  test('validates incorrect password criteria', () => {
+    fillOutForm({ password: 'short' });
+    expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+  });
+
+  test('handles form submission with console error on invalid form', () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    fillOutForm({ email: 'invalidemail' }); // Invalid email
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Form is invalid');
+    consoleErrorSpy.mockRestore();
+  });
 });
