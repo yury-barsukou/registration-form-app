@@ -98,3 +98,61 @@ describe('SignUpForm', () => {
     });
   });
 });
+
+// Additional tests to improve coverage
+
+describe('SignUpForm - Additional Tests', () => {
+  beforeEach(() => {
+    render(<SignUpForm />);
+  });
+
+  describe('Password Validations', () => {
+    test.each([
+      { password: 'abc', hasUppercase: false, hasLowercase: true, hasNumber: false, isLongEnough: false },
+      { password: 'ABC', hasUppercase: true, hasLowercase: false, hasNumber: false, isLongEnough: false },
+      { password: '123', hasUppercase: false, hasLowercase: false, hasNumber: true, isLongEnough: false },
+      { password: 'Aa1', hasUppercase: true, hasLowercase: true, hasNumber: true, isLongEnough: false },
+      { password: 'Aa123456', hasUppercase: true, hasLowercase: true, hasNumber: true, isLongEnough: true }
+    ])('validates password "$password" correctly', ({ password, hasUppercase, hasLowercase, hasNumber, isLongEnough }) => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: password } });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(hasUppercase ? /green/ : /red/);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(hasLowercase ? /green/ : /red/);
+      expect(screen.getByText(/1 number/i).className).toMatch(hasNumber ? /green/ : /red/);
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(isLongEnough ? /green/ : /red/);
+    });
+  });
+
+  describe('Email Validations', () => {
+    test.each([
+      { email: 'invalid@', isValid: false },
+      { email: 'valid@example.com', isValid: true },
+      { email: 'noatsign.com', isValid: false },
+      { email: 'correct@domain.com', isValid: true }
+    ])('validates email "$email" correctly', ({ email, isValid }) => {
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: email } });
+      const validationMessage = screen.queryByText(/Please enter a valid email address/i);
+      if (isValid) {
+        expect(validationMessage).toBeNull();
+      } else {
+        expect(validationMessage).toBeInTheDocument();
+      }
+    });
+  });
+
+  describe('Form Validation on Field Changes', () => {
+    test.each([
+      { field: 'firstName', value: '', isValid: false },
+      { field: 'lastName', value: '', isValid: false },
+      { field: 'email', value: 'invalid', isValid: false },
+      { field: 'password', value: 'short', isValid: false }
+    ])('modifies form validity when $field is "$value"', ({ field, value, isValid }) => {
+      fillOutForm({ [field]: value });
+      const createAccountButton = screen.getByRole('button', { name: BUTTON_TEXT });
+      if (isValid) {
+        expect(createAccountButton).not.toBeDisabled();
+      } else {
+        expect(createAccountButton).toBeDisabled();
+      }
+    });
+  });
+});
