@@ -86,7 +86,7 @@ describe('SignInForm', () => {
       expect(consoleSpy).toHaveBeenLastCalledWith('Sign In submitted:', formData);
     });
   });
-};
+});
 
 // Additional unit tests to cover edge cases and improve test coverage
 
