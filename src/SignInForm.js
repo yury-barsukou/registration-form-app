@@ -34,9 +34,6 @@ const SignInForm = () => {
     if (isSignInFormValid()) {
       console.log('Sign In submitted:', signInData);
       // Handle the sign-in form submission, e.g., sending data to a server
-    } else {
-      // Due to the disabled Submit button, this path won't be hit through normal UI interaction
-      console.error('Sign In form is invalid');
     }
   };
 
@@ -81,7 +78,7 @@ const SignInForm = () => {
           <a href="#" tabIndex="0">Forgot Password?</a>
         </div>
         <div className="space-above-large">
-           {/* Form submission is blocked on a disabled Submit button due to invalid form data */}
+          {/* Form submission is blocked on a disabled Submit button due to invalid form data */}
           <button
             id="sign_in_btn"
             className={`next-button btn-new btn-large ${isSignInFormValid() ? '' : 'btn-disabled'}`}
