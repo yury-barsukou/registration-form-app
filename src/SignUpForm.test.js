@@ -70,31 +70,93 @@ describe('SignUpForm', () => {
     });
   });
 
-  describe('Form Submission', () => {
-    let consoleSpy;
+  describe('SignUpForm Additional Tests', () => {
+  beforeEach(() => {
+    render(<SignUpForm />);
+  });
+
+  describe('Password Validations', () => {
+    test('password must contain at least one uppercase letter', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'password123' } });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/red/);
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'Password123' } });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
+    });
+
+    test('password must contain at least one lowercase letter', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'PASSWORD123' } });
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/red/);
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'Password123' } });
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
+    });
+
+    test('password must contain at least one digit', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'Password' } });
+      expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'Password1' } });
+      expect(screen.getByText(/1 number/i).className).toMatch(/green/);
+    });
+
+    test('password must be at least 8 characters long', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'Pass1' } });
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'Password1' } });
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+    });
+  });
+
+  describe('Email Validations', () => {
+    test.each([
+      ['plainaddress', false],
+      ['@missinglocalpart.com', false],
+      ['missingdomain@', false],
+      ['john.doe@com', false],
+      ['john.doe@example.com', true],
+      ['email@123.123.123.123', true],
+      ['email@[123.123.123.123]', true],
+      ['"email"@example.com', true],
+    ])('validates the email: %s as %s', (email, isValid) => {
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: email } });
+      if (isValid) {
+        expect(screen.queryByText(/Please enter a valid email address/i)).toBeNull();
+      } else {
+        expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+      }
+    });
+  });
+
+  describe('Form Fields Presence Validation', () => {
+    test.each([
+      ['firstName', 'John'],
+      ['lastName', 'Doe'],
+      ['email', VALID_EMAIL],
+      ['password', VALID_PASSWORD],
+    ])('ensures %s field is required for form submission', (fieldName, validValue) => {
+      const formData = fillOutForm({ [fieldName]: '' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+
+      fireEvent.change(screen.getByLabelText(LABELS[fieldName]), { target: { value: validValue } });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
+    });
+  });
+
+  describe('Invalid Form Submission', () => {
+    let consoleErrorSpy;
 
     beforeEach(() => {
-      consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+      consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     });
 
     afterEach(() => {
-      consoleSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
     });
 
-    test('enables Create Account button with valid form', () => {
-      fillOutForm();
-      expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
-    });
-
-    test('disables Create Account button with invalid form', () => {
-      fillOutForm({ firstName: '' }); // Explicitly set an invalid field
-      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
-    });
-
-    test('calls console log with correct data on valid form submission', () => {
-      const formData = fillOutForm();
+    test('does not call console log and shows error on invalid form submission', () => {
+      fillOutForm({ email: 'invalid' }); // Explicitly set an invalid email
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
-      expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Form is invalid');
     });
   });
 });
