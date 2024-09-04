@@ -83,7 +83,7 @@ describe('SignUpForm', () => {
 
     test('enables Create Account button with valid form', () => {
       fillOutForm();
-      expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).not toBeDisabled();
     });
 
     test('disables Create Account button with invalid form', () => {
@@ -95,6 +95,12 @@ describe('SignUpForm', () => {
       const formData = fillOutForm();
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+    });
+
+    test('does not call console log on invalid form submission', () => {
+      fillOutForm({ email: 'invalid' }); // Explicitly set an invalid field
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
     });
   });
 });
