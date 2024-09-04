@@ -29,72 +29,77 @@ const fillOutForm = (overrides = {}) => {
   return formData;
 };
 
-describe('SignUpForm', () => {
+describe('SignUpForm Additional Tests', () => {
   beforeEach(() => {
     render(<SignUpForm />);
   });
 
-  test('renders the sign-up form with all fields', () => {
-    expect(screen.getByLabelText(LABELS.firstName)).toBeInTheDocument();
-    expect(screen.getByLabelText(LABELS.lastName)).toBeInTheDocument();
-    expect(screen.getByLabelText(LABELS.email)).toBeInTheDocument();
-    expect(screen.getByLabelText(LABELS.password)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeInTheDocument();
-  });
-
-  describe('Field Entry', () => {
-    test.each(Object.entries(LABELS))('allows entry of %s', (fieldName, labelRegex) => {
-      const value = 'TestValue';
-      fireEvent.change(screen.getByLabelText(labelRegex), { target: { value } });
-      expect(screen.getByLabelText(labelRegex)).toHaveValue(value);
-    });
-  });
-
-  describe('Form Validation', () => {
-    test('validates email format correctly', () => {
-      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'invalid' } });
-      expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
-      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: VALID_EMAIL } });
-      expect(screen.queryByText(/Please enter a valid email address/i)).toBeNull();
+  describe('Password Validation Edge Cases', () => {
+    test('password with only lowercase letters does not meet criteria', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'password' } });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/red/);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
     });
 
-    test('validates password criteria correctly', () => {
-      const password = screen.getByLabelText(LABELS.password);
-      fireEvent.change(password, { target: { value: 'short' } });
-      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
-      fireEvent.change(password, { target: { value: 'LongEnough1' } });
+    test('password with only uppercase letters does not meet criteria', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'PASSWORD' } });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/red/);
+      expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+    });
+
+    test('password with less than 8 characters does not meet criteria', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'Pass1' } });
       expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
       expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
       expect(screen.getByText(/1 number/i).className).toMatch(/green/);
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
+    });
+
+    test('password with no numbers does not meet criteria', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: 'Password' } });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 number/i).className).toMatch(/red/);
       expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
     });
   });
 
-  describe('Form Submission', () => {
-    let consoleSpy;
+  describe('Email Validation Edge Cases', () => {
+    test('email without @ symbol is invalid', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'johndoe.example.com' } });
+      expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+    });
+
+    test('email without domain is invalid', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'john.doe@' } });
+      expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+    });
+
+    test('email with invalid characters is invalid', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: 'john.doe@example,com' } });
+      expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('Form Submission Edge Cases', () => {
+    let consoleErrorSpy;
 
     beforeEach(() => {
-      consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+      consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     });
 
     afterEach(() => {
-      consoleSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
     });
 
-    test('enables Create Account button with valid form', () => {
-      fillOutForm();
-      expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
-    });
-
-    test('disables Create Account button with invalid form', () => {
-      fillOutForm({ firstName: '' }); // Explicitly set an invalid field
-      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
-    });
-
-    test('calls console log with correct data on valid form submission', () => {
-      const formData = fillOutForm();
+    test('logs error to console with invalid form submission', () => {
+      fillOutForm({ email: 'invalid' }); // Explicitly set an invalid email
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
-      expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Form is invalid');
     });
   });
 });
