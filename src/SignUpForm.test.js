@@ -96,5 +96,50 @@ describe('SignUpForm', () => {
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
     });
+
+    test('does not call console log on invalid form submission', () => {
+      fillOutForm({ email: 'invalid' }); // Explicitly set an invalid field
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Edge Cases', () => {
+    test('handles empty form submission', () => {
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles password with only uppercase letters', () => {
+      fillOutForm({ password: 'ONLYUPPERCASE' });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/red/);
+      expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+    });
+
+    test('handles password with only lowercase letters', () => {
+      fillOutForm({ password: 'onlylowercase' });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/red/);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+    });
+
+    test('handles password with only numbers', () => {
+      fillOutForm({ password: '12345678' });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/red/);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/red/);
+      expect(screen.getByText(/1 number/i).className).toMatch(/green/);
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+    });
+
+    test('handles password with mixed characters but less than 8', () => {
+      fillOutForm({ password: 'Ab1' });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 number/i).className).toMatch(/green/);
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
+    });
   });
 });
