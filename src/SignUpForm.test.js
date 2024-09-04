@@ -96,5 +96,11 @@ describe('SignUpForm', () => {
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
     });
+
+    test('does not call console log on invalid form submission', () => {
+      fillOutForm({ email: 'invalid' }); // Explicitly set an invalid field
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
+    });
   });
 });
