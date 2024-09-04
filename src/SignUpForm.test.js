@@ -96,5 +96,13 @@ describe('SignUpForm', () => {
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
     });
+
+    test('displays error message on invalid form submission', () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      fillOutForm({ email: 'invalid' }); // Explicitly set an invalid email
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleErrorSpy).toHaveBeenLastCalledWith('Form is invalid');
+      consoleErrorSpy.mockRestore();
+    });
   });
 });
