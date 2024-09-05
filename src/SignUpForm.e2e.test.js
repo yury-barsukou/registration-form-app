@@ -1,6 +1,8 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const assert = require('assert');
 
+// E2E tests for Sign Up form
+
 describe('Sign Up Form E2E Tests', function() {
   let driver;
 
