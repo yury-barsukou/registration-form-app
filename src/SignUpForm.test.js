@@ -97,4 +97,67 @@ describe('SignUpForm', () => {
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
     });
   });
+
+  test('validates first name and last name length correctly', () => {
+    const firstNameInput = screen.getByLabelText(LABELS.firstName);
+    const lastNameInput = screen.getByLabelText(LABELS.lastName);
+    
+    // Test for first name
+    fireEvent.change(firstNameInput, { target: { value: '' } });
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+
+    fireEvent.change(firstNameInput, { target: { value: 'J' } });
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
+    
+    // Test for last name
+    fireEvent.change(lastNameInput, { target: { value: '' } });
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+
+    fireEvent.change(lastNameInput, { target: { value: 'D' } });
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
+});
+
+test('displays email validation message only for invalid email', () => {
+    const emailInput = screen.getByLabelText(LABELS.email);
+    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+    expect(screen.getByText(/Please enter a valid email address/i)).toBeInTheDocument();
+
+    fireEvent.change(emailInput, { target: { value: VALID_EMAIL } });
+    expect(screen.queryByText(/Please enter a valid email address/i)).toBeNull();
+});
+
+test('password validations reset correctly when password is changed', () => {
+    const passwordInput = screen.getByLabelText(LABELS.password);
+    fireEvent.change(passwordInput, { target: { value: 'LongEnough1' } });
+
+    // Initially all validations should pass
+    expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
+    expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
+    expect(screen.getByText(/1 number/i).className).toMatch(/green/);
+    expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+
+    // Change password to not meet the criteria
+    fireEvent.change(passwordInput, { target: { value: 'short' } });
+    expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
+});
+
+test('prevents form submission with invalid email', () => {
+    fillOutForm({ email: 'invalid-email' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleSpy).not.toHaveBeenCalled();
+});
+
+test('prevents form submission with password not meeting criteria', () => {
+    fillOutForm({ password: 'short' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleSpy).not.toHaveBeenCalled();
+});
+
+test('form submission does not proceed when any of the password criteria is not met', () => {
+    const invalidPasswords = ['Short1', 'nouppercase123', 'NOLOWERCASE123', 'NoNumbers'];
+    invalidPasswords.forEach(password => {
+        fillOutForm({ password });
+        fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+        expect(consoleSpy).not.toHaveBeenCalled();
+    });
 });
