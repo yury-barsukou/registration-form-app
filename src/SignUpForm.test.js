@@ -11,6 +11,7 @@ const LABELS = {
 const BUTTON_TEXT = /Create Account/i;
 const VALID_EMAIL = 'john.doe@example.com';
 const VALID_PASSWORD = 'Password123';
+const SHORT_PASSWORD = 'short'
 
 const fillOutForm = (overrides = {}) => {
   const formData = {
@@ -95,6 +96,18 @@ describe('SignUpForm', () => {
       const formData = fillOutForm();
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+    });
+    
+    test('does not submit form with invalid email', () => {
+      const formData = fillOutForm({ email: INVALID_EMAIL });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
+    });
+
+    test('does not submit form with password missing criteria', () => {
+      const formData = fillOutForm({ password: SHORT_PASSWORD });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
     });
   });
 });
