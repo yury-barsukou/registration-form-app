@@ -98,3 +98,62 @@ describe('SignUpForm', () => {
     });
   });
 });
+
+describe('SignUpForm Additional Tests', () => {
+  beforeEach(() => {
+    render(<SignUpForm />);
+  });
+
+  test('validates first name field is required', () => {
+    fillOutForm({ firstName: '' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+  });
+
+  test('validates last name field is required', () => {
+    fillOutForm({ lastName: '' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+  });
+
+  test('validates password must contain at least one uppercase letter', () => {
+    fillOutForm({ password: 'password123' }); // No uppercase letters
+    expect(screen.getByText(/1 uppercase character/i).className).toMatch(/red/);
+  });
+
+  test('validates password must contain at least one lowercase letter', () => {
+    fillOutForm({ password: 'PASSWORD123' }); // No lowercase letters
+    expect(screen.getByText(/1 lowercase character/i).className).toMatch(/red/);
+  });
+
+  test('validates password must contain at least one number', () => {
+    fillOutForm({ password: 'Password' }); // No numbers
+    expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+  });
+
+  test('form is invalid when email is missing', () => {
+    fillOutForm({ email: '' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+  });
+
+  test('form is invalid when password does not meet criteria', () => {
+    fillOutForm({ password: 'short' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+  });
+
+  test('display error message when form is submitted with invalid email', () => {
+    fillOutForm({ email: 'invalidemail' });
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(screen.queryByText(/Please enter a valid email address/i)).toBeInTheDocument();
+  });
+
+  test('does not log to console on invalid form submission', () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    fillOutForm({ firstName: '' }); // Invalid form
+    fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+    expect(consoleSpy).toHaveBeenLastCalledWith('Form is invalid');
+    consoleSpy.mockRestore();
+  });
+});
