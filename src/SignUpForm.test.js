@@ -62,7 +62,7 @@ describe('SignUpForm', () => {
       const password = screen.getByLabelText(LABELS.password);
       fireEvent.change(password, { target: { value: 'short' } });
       expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
-      fireEvent.change(password, { target: { value: 'LongEnough1' } });
+      fireEvent.change(password, { target: { value: 'LongEnough123' } });
       expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
       expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
       expect(screen.getByText(/1 number/i).className).toMatch(/green/);
