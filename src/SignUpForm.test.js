@@ -66,7 +66,7 @@ describe('SignUpForm', () => {
       expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
       expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
       expect(screen.getByText(/1 number/i).className).toMatch(/green/);
-      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+      expect(screen.getByText(/Minimum 10 characters/i).className).toMatch(/green/);
     });
   });
 
