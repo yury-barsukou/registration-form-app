@@ -68,6 +68,24 @@ describe('SignUpForm', () => {
       expect(screen.getByText(/1 number/i).className).toMatch(/green/);
       expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
     });
+
+    test('shows error message for empty required fields', () => {
+      fireEvent.change(screen.getByLabelText(LABELS.firstName), { target: { value: '' } });
+      fireEvent.blur(screen.getByLabelText(LABELS.firstName));
+      expect(screen.queryByText(/First Name is required/i)).toBeInTheDocument();
+
+      fireEvent.change(screen.getByLabelText(LABELS.lastName), { target: { value: '' } });
+      fireEvent.blur(screen.getByLabelText(LABELS.lastName));
+      expect(screen.queryByText(/Last Name is required/i)).toBeInTheDocument();
+
+      fireEvent.change(screen.getByLabelText(LABELS.email), { target: { value: '' } });
+      fireEvent.blur(screen.getByLabelText(LABELS.email));
+      expect(screen.queryByText(/Email is required/i)).toBeInTheDocument();
+
+      fireEvent.change(screen.getByLabelText(LABELS.password), { target: { value: '' } });
+      fireEvent.blur(screen.getByLabelText(LABELS.password));
+      expect(screen.queryByText(/Password is required/i)).toBeInTheDocument();
+    });
   });
 
   describe('Form Submission', () => {
@@ -95,6 +113,12 @@ describe('SignUpForm', () => {
       const formData = fillOutForm();
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+    });
+
+    test('does not call console log on invalid form submission', () => {
+      fillOutForm({ email: 'invalid' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
     });
   });
 });
