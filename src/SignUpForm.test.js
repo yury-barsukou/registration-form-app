@@ -96,5 +96,42 @@ describe('SignUpForm', () => {
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
     });
+
+    test('does not call console log on invalid form submission', () => {
+      fillOutForm({ email: 'invalid' }); // Explicitly set an invalid field
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Edge Cases', () => {
+    test('handles empty form submission', () => {
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles form submission with only first name filled', () => {
+      fillOutForm({ lastName: '', email: '', password: '' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles form submission with only last name filled', () => {
+      fillOutForm({ firstName: '', email: '', password: '' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles form submission with only email filled', () => {
+      fillOutForm({ firstName: '', lastName: '', password: '' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles form submission with only password filled', () => {
+      fillOutForm({ firstName: '', lastName: '', email: '' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
   });
 });
