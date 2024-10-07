@@ -96,5 +96,54 @@ describe('SignUpForm', () => {
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
     });
+
+    test('does not call console log on invalid form submission', () => {
+      fillOutForm({ email: 'invalid-email' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Edge Cases', () => {
+    test('handles empty form submission', () => {
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles form submission with only first name', () => {
+      fillOutForm({ lastName: '', email: '', password: '' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles form submission with only last name', () => {
+      fillOutForm({ firstName: '', email: '', password: '' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles form submission with only email', () => {
+      fillOutForm({ firstName: '', lastName: '', password: '' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles form submission with only password', () => {
+      fillOutForm({ firstName: '', lastName: '', email: '' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles form submission with invalid email and valid password', () => {
+      fillOutForm({ email: 'invalid-email', password: VALID_PASSWORD });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
+
+    test('handles form submission with valid email and invalid password', () => {
+      fillOutForm({ email: VALID_EMAIL, password: 'short' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    });
   });
 });
