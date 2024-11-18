@@ -132,3 +132,85 @@ import SignUpForm from './SignUpForm';
 
 ReactDOM.render(<SignUpForm />, document.getElementById('root'));
 ```
+
+# Documentation for `SignUpForm.test.js`
+
+This file contains the test suite for the `SignUpForm` component. The tests are written using the `@testing-library/react` library and cover various aspects of the sign-up form, including rendering, field entry, form validation, and form submission.
+
+## Test Suite Overview
+
+### Constants and Helper Functions
+
+- **LABELS**: An object containing regex patterns for the form field labels.
+- **BUTTON_TEXT**: The text for the "Create Account" button.
+- **VALID_EMAIL**: A valid email address used for testing.
+- **VALID_PASSWORD**: A valid password used for testing.
+- **fillOutForm**: A helper function that fills out the form with default or overridden values.
+
+### Test Cases
+
+#### Rendering Tests
+
+- **renders the sign-up form with all fields**: Ensures that all form fields and the "Create Account" button are rendered.
+
+#### Field Entry Tests
+
+- **allows entry of fieldName**: Tests that each form field allows entry of text.
+
+#### Form Validation Tests
+
+- **validates email format correctly**: Tests that the email field validates the format correctly.
+- **validates password criteria correctly**: Tests that the password field validates the criteria (length, uppercase, lowercase, number) correctly.
+
+#### Form Submission Tests
+
+- **enables Create Account button with valid form**: Tests that the "Create Account" button is enabled when the form is valid.
+- **disables Create Account button with invalid form**: Tests that the "Create Account" button is disabled when the form is invalid.
+- **calls console log with correct data on valid form submission**: Tests that the form data is logged to the console on valid form submission.
+
+## Important Information for Testing
+
+### Endpoints
+- No API endpoints are called in these tests. The form submission is logged to the console.
+
+### Specific Calculation/Validation Logic
+- **Email Validation**: Ensures that the email format is correct.
+- **Password Validation**: Ensures that the password meets the criteria (minimum 8 characters, at least one uppercase letter, one lowercase letter, and one number).
+
+### Testing Scenarios
+
+#### Positive Cases
+- Form fields accept valid input.
+- Form validation passes with valid email and password.
+- "Create Account" button is enabled with valid form data.
+- Form submission logs the correct data to the console.
+
+#### Negative Cases
+- Form fields reject invalid input.
+- Form validation fails with invalid email and password.
+- "Create Account" button is disabled with invalid form data.
+
+#### Edge Cases
+- Email field with various invalid formats (e.g., missing "@" or domain).
+- Password field with various invalid formats (e.g., less than 8 characters, missing uppercase, lowercase, or number).
+
+### Boundary Values
+- Email field with the minimum valid format (e.g., "a@b.co").
+- Password field with exactly 8 characters, including the required criteria.
+
+## Technical Debt
+
+### Code Structure
+- The test file is well-structured with clear separation of different test cases.
+
+### Code Optimizations
+- Consider adding more edge cases for email and password validation.
+
+### Security Vulnerability
+- No security vulnerabilities identified in the test file.
+
+### Code Smells
+- No code smells identified in the test file.
+
+### Code Style Issues
+- No code style issues identified in the test file.
