@@ -97,3 +97,81 @@ The `SignInForm` component is a React functional component that provides a sign-
 ### Code Style Issues
 - The inline validation messages and button classes can be refactored for better readability.
 - Consider using a more descriptive name for the `signInData` state variable, such as `formData`.
+
+## SignUpForm Component
+
+### Overview
+The `SignUpForm` component is a React functional component that provides a user interface for signing up new users. It includes fields for first name, last name, email, and password, along with validation logic for the email and password fields.
+
+### Component Structure
+- **State Variables:**
+  - `formData`: An object containing the user's input for first name, last name, email, and password.
+  - `passwordValidations`: An object containing boolean values indicating whether the password meets certain criteria (uppercase, lowercase, number, minimum length).
+  - `isEmailValid`: A boolean indicating whether the email input is valid.
+
+- **Event Handlers:**
+  - `handleInputChange`: Updates the state variables based on user input and triggers validation functions for email and password.
+  - `validatePassword`: Validates the password based on predefined criteria.
+  - `validateEmail`: Validates the email format using a regular expression.
+  - `isFormValid`: Checks if all form fields are valid.
+  - `handleSubmit`: Handles form submission, logging the form data if valid, or logging an error if invalid.
+
+- **JSX Structure:**
+  - A form element containing input fields for first name, last name, email, and password.
+  - Validation messages for email and password.
+  - A submit button that is enabled only if the form is valid.
+
+### Important Information for Testing
+
+#### Endpoints
+- There are no specific endpoints in this component as it currently logs the form data to the console upon submission. In a real-world scenario, you would typically send the data to a server endpoint.
+
+#### Validation Logic
+- **Email Validation:**
+  - Uses a regular expression to check if the email format is valid.
+  - Displays an error message if the email is invalid.
+
+- **Password Validation:**
+  - Checks for at least one uppercase character.
+  - Checks for at least one lowercase character.
+  - Checks for at least one number.
+  - Checks if the password is at least 8 characters long.
+  - Displays validation messages that change color based on whether the criteria are met.
+
+#### Testing Scenarios
+- **Positive Cases:**
+  - Valid first name, last name, email, and password that meets all criteria.
+  - Form submission with valid data.
+
+- **Negative Cases:**
+  - Invalid email format.
+  - Password missing one or more criteria (uppercase, lowercase, number, minimum length).
+  - Empty first name or last name fields.
+  - Form submission with invalid data.
+
+- **Edge Cases:**
+  - Email with special characters.
+  - Password exactly 8 characters long.
+  - Password with only one type of character (e.g., all uppercase or all numbers).
+  - Rapid input changes to test real-time validation.
+
+#### Boundary Values
+- Email with the minimum and maximum length allowed by the regular expression.
+- Password with exactly 8 characters and just below/above 8 characters.
+
+### Technical Debt
+- **Code Structure:**
+  - The component is well-structured with clear separation of concerns between state management, validation logic, and rendering.
+  - Consider extracting validation logic into separate utility functions for better reusability and testability.
+
+- **Code Optimizations:**
+  - Debounce the email and password validation to improve performance for rapid input changes.
+  - Use a form library like Formik or React Hook Form for more scalable form handling.
+
+- **Security Vulnerabilities:**
+  - Ensure that the form data is sanitized before sending it to the server to prevent injection attacks.
+  - Implement client-side and server-side validation for better security.
+
+- **Code Smells and Style Issues:**
+  - The component follows good coding practices with meaningful variable names and clear logic.
+  - Consider adding PropTypes for better type checking and documentation.
