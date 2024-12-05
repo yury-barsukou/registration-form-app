@@ -34,7 +34,8 @@ const SignUpForm = () => {
       hasUppercase: /[A-Z]/.test(password),
       hasLowercase: /[a-z]/.test(password),
       hasNumber: /[0-9]/.test(password),
-      isLongEnough: password.length >= 8,
+      hasSpecialSymbol: /[!@#$%^&*]/.test(password),
+    isLongEnough: password.length >= 10,
     });
   };
 
