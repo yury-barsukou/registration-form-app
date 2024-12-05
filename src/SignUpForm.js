@@ -134,8 +134,11 @@ const SignUpForm = () => {
             <li className={passwordValidations.hasNumber ? 'green' : 'red'}>
               1 number
             </li>
+            <li className={passwordValidations.hasSpecialSymbol ? 'green' : 'red'}>
+              1 special symbol (e.g., !@#$%^&*)
+            </li>
             <li className={passwordValidations.isLongEnough ? 'green' : 'red'}>
-              Minimum 8 characters
+              Minimum 10 characters
             </li>
           </ul>
         </div>
