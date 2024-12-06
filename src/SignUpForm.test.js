@@ -66,7 +66,20 @@ describe('SignUpForm', () => {
       expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
       expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
       expect(screen.getByText(/1 number/i).className).toMatch(/green/);
-      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 special symbol/i).className).toMatch(/green/);
+      expect(screen.getByText(/Minimum 10 characters/i).className).toMatch(/green/);
+    });
+
+    test('validates password criteria with special symbol correctly', () => {
+      const password = screen.getByLabelText(LABELS.password);
+      fireEvent.change(password, { target: { value: 'Password123!' } });
+      expect(screen.getByText(/1 special symbol/i).className).toMatch(/green/);
+    });
+
+    test('validates password criteria without special symbol correctly', () => {
+      const password = screen.getByLabelText(LABELS.password);
+      fireEvent.change(password, { target: { value: 'Password123' } });
+      expect(screen.getByText(/1 special symbol/i).className).toMatch(/red/);
     });
   });
 
