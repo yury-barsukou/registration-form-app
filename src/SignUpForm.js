@@ -34,7 +34,8 @@ const SignUpForm = () => {
       hasUppercase: /[A-Z]/.test(password),
       hasLowercase: /[a-z]/.test(password),
       hasNumber: /[0-9]/.test(password),
-      isLongEnough: password.length >= 8,
+      hasSpecialSymbol: /[!@#$%^&*]/.test(password),
+    isLongEnough: password.length >= 10,
     });
   };
 
@@ -133,8 +134,11 @@ const SignUpForm = () => {
             <li className={passwordValidations.hasNumber ? 'green' : 'red'}>
               1 number
             </li>
+            <li className={passwordValidations.hasSpecialSymbol ? 'green' : 'red'}>
+              1 special symbol (e.g., !@#$%^&*)
+            </li>
             <li className={passwordValidations.isLongEnough ? 'green' : 'red'}>
-              Minimum 8 characters
+              Minimum 10 characters
             </li>
           </ul>
         </div>
