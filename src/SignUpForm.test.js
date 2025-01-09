@@ -68,6 +68,15 @@ describe('SignUpForm', () => {
       expect(screen.getByText(/1 number/i).className).toMatch(/green/);
       expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
     });
+
+    test('displays password validation messages correctly', () => {
+      const password = screen.getByLabelText(LABELS.password);
+      fireEvent.change(password, { target: { value: 'Password1' } });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
+      expect(screen.getByText(/1 number/i).className).toMatch(/green/);
+      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+    });
   });
 
   describe('Form Submission', () => {
@@ -95,6 +104,12 @@ describe('SignUpForm', () => {
       const formData = fillOutForm();
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+    });
+
+    test('does not call console log on invalid form submission', () => {
+      fillOutForm({ email: 'invalid' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
     });
   });
 });
