@@ -134,7 +134,7 @@ const SignUpForm = () => {
               1 number
             </li>
             <li className={passwordValidations.isLongEnough ? 'green' : 'red'}>
-              Minimum 8 characters
+              Minimum 10 characters
             </li>
           </ul>
         </div>
