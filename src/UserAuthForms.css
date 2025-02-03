@@ -75,6 +75,10 @@
   .password-validation li.red {
     color: red;
   }
+
+  .password-validation li {
+    font-size: 0.9em;
+  }
   
   .email-validation-message.invalid, .password-validation-message.invalid {
     color: red;
