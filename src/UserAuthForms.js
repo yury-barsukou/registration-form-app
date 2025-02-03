@@ -3,6 +3,8 @@ import './UserAuthForms.css';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 
+// Ensure password validation logic is updated to enforce minimum 10 characters
+
 const UserAuthForms = () => {
   const [activeForm, setActiveForm] = useState('signin'); // 'signin' or 'signup'
 
