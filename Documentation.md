@@ -26,6 +26,64 @@
 - **Reference Check:**
   - Ensure that the file path is correctly referenced in the HTML or any other relevant configuration files.
 
+## Documentation for `SignUpForm.js`
+
+### Technical Documentation
+
+#### Purpose
+The `SignUpForm.js` file implements a user registration form using React. It captures user details such as first name, last name, email, and password, and includes validation for email and password fields.
+
+#### Architecture
+- **State Management:** Uses React's `useState` hook to manage form data and validation states.
+- **Form Fields:** Includes input fields for first name, last name, email, and password.
+- **Validation:** 
+  - **Email Validation:** Uses a regular expression to validate the email format.
+  - **Password Validation:** Checks for the presence of uppercase letters, lowercase letters, numbers, and a minimum length of 8 characters.
+
+#### Core Logic
+- **handleInputChange:** Updates the form data state and triggers validation functions for email and password fields.
+- **validatePassword:** Updates the password validation state based on the criteria.
+- **validateEmail:** Updates the email validation state based on the regex test.
+- **isFormValid:** Checks if all form fields are filled and valid.
+- **handleSubmit:** Handles form submission, checks if the form is valid, and logs the form data.
+
+### User Guide
+
+#### How to Use
+1. **First Name:** Enter your first name in the "First Name" field.
+2. **Last Name:** Enter your last name in the "Last Name" field.
+3. **Email:** Enter a valid email address in the "Email" field. An error message will appear if the email is invalid.
+4. **Password:** Enter a password that meets the following criteria:
+   - At least one uppercase letter
+   - At least one lowercase letter
+   - At least one number
+   - Minimum length of 8 characters
+5. **Submit:** Click the "Create Account" button to submit the form. The button will be disabled if the form is invalid.
+
+#### Example
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import SignUpForm from './SignUpForm';
+
+ReactDOM.render(<SignUpForm />, document.getElementById('root'));
+```
+
+### Testing Checklist
+
+#### Functional Testing
+- **Form Field Validation:**
+  - Verify that the first name and last name fields accept input.
+  - Verify that the email field validates the input correctly and shows an error message for invalid emails.
+  - Verify that the password field validates the input based on the criteria and updates the validation messages accordingly.
+- **Form Submission:**
+  - Verify that the form can be submitted when all fields are valid.
+  - Verify that the form cannot be submitted when any field is invalid.
+- **Edge Cases:**
+  - Test with empty fields to ensure the form is not submitted.
+  - Test with various invalid email formats.
+  - Test with passwords that do not meet the criteria.
+
 # Documentation for public/robots.txt
 
 ### Technical Documentation
