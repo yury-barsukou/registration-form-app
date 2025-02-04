@@ -1,6 +1,21 @@
-# Getting Started with Create React App
+# User Authentication Forms
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a simple user authentication system built with React. It includes sign-in and sign-up forms with basic validation.
+
+## Project Structure
+
+- `public/`: Contains static assets like the favicon, HTML file, and manifest.
+- `src/`: Contains the source code for the React application.
+  - `SignInForm.js`: Component for the sign-in form.
+  - `SignUpForm.js`: Component for the sign-up form.
+  - `SignUpForm.test.js`: Tests for the sign-up form component.
+  - `UserAuthForms.css`: CSS file for styling the authentication forms.
+  - `UserAuthForms.js`: Common logic for user authentication forms.
+  - `index.js`: Entry point of the React application.
+  - `index.css`: Global CSS file.
+  - `logo.svg`: React logo.
+  - `reportWebVitals.js`: Performance measuring tool.
+  - `setupTests.js`: Configuration for running tests.
 
 ## Available Scripts
 
@@ -68,3 +83,28 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## User Guide
+
+### Sign-In Form
+
+1. Open the application in your browser.
+2. Navigate to the sign-in page.
+3. Enter your email and password.
+4. Click the "Sign In" button.
+
+### Sign-Up Form
+
+1. Open the application in your browser.
+2. Navigate to the sign-up page.
+3. Enter your name, email, and password.
+4. Click the "Sign Up" button.
+
+## Testing Checklist
+
+- Ensure the sign-in form validates user input correctly.
+- Ensure the sign-up form validates user input correctly.
+- Test edge cases such as empty fields, invalid email formats, and short passwords.
+- Verify that error messages are displayed appropriately.
+- Check that the forms submit successfully with valid input.
+- Ensure that the application handles authentication states correctly.
