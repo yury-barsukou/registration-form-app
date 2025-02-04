@@ -68,6 +68,155 @@ The current configuration allows all web crawlers to access and crawl the entire
    - Test with different user-agents to ensure that specific rules are applied correctly.
    - Test with various paths to ensure that the disallowed paths are correctly restricted.
 
+## SignInForm Component
+
+### Technical Documentation
+
+#### File: `src/SignInForm.js`
+
+**Purpose:**
+The `SignInForm.js` file implements a sign-in form component using React. This component allows users to input their email and password to sign in. It includes validation for email format and password length.
+
+**Architecture:**
+- **State Management:** Uses React's `useState` hook to manage form data and validation states.
+- **Form Handling:** Contains functions to handle input changes, validate email, and handle form submission.
+- **Validation:** Validates email format using a regular expression and ensures the password is at least 8 characters long.
+
+**Core Logic:**
+1. **State Initialization:**
+   - `signInData`: Stores email and password input values.
+   - `isEmailValid`: Tracks the validity of the email input.
+   - `isSignInPasswordValid`: Tracks the validity of the password input.
+
+2. **Input Change Handling:**
+   - `handleSignInInputChange`: Updates state based on user input and triggers validation functions.
+
+3. **Email Validation:**
+   - `validateEmail`: Uses a regular expression to validate the email format.
+
+4. **Form Validation:**
+   - `isSignInFormValid`: Checks if all form inputs are valid before allowing submission.
+
+5. **Form Submission:**
+   - `handleSignInSubmit`: Prevents default form submission, validates the form, and logs the form data if valid.
+
+### Functional User Guide
+
+#### How to Use the Sign-In Form Component
+
+1. **Import the Component:**
+   ```javascript
+   import SignInForm from './SignInForm';
+   ```
+
+2. **Render the Component:**
+   ```javascript
+   function App() {
+     return (
+       <div className="App">
+         <SignInForm />
+       </div>
+     );
+   }
+
+   export default App;
+   ```
+
+3. **User Interaction:**
+   - **Email Input:** Users can enter their email address. The component will validate the format and display an error message if invalid.
+   - **Password Input:** Users can enter their password. The component will ensure the password is at least 8 characters long and display an error message if invalid.
+   - **Forgot Password:** A link is provided for users to navigate to a password recovery page.
+   - **Submit Button:** The button is enabled only when both email and password inputs are valid. Clicking the button will log the form data to the console.
+
+### Testing Checklist
+
+1. **Email Validation:**
+   - Test with a valid email format (e.g., `user@example.com`).
+   - Test with an invalid email format (e.g., `user@com`, `user@.com`).
+
+2. **Password Validation:**
+   - Test with a password of fewer than 8 characters.
+   - Test with a password of 8 or more characters.
+
+3. **Form Submission:**
+   - Test form submission with valid email and password.
+   - Test form submission with invalid email and/or password (ensure the form is not submitted).
+
+4. **UI Elements:**
+   - Ensure the error messages are displayed correctly for invalid inputs.
+   - Verify the "Forgot Password?" link is functional.
+   - Check the submit button is enabled/disabled based on form validity.
+
+5. **Accessibility:**
+   - Ensure all form elements are accessible via keyboard navigation.
+   - Verify that screen readers can read the form labels and error messages.
+
+### Technical Documentation
+
+**Purpose:**
+The `robots.txt` file is used to manage and control the behavior of web crawlers and robots that visit the website. It specifies which parts of the website should not be accessed or crawled by these automated agents.
+
+**Structure:**
+- **User-agent:** This directive specifies the web crawler to which the rule applies. The asterisk (*) means that the rule applies to all web crawlers.
+- **Disallow:** This directive specifies the URLs that the specified user-agent is not allowed to crawl. An empty value means that there are no restrictions, and all parts of the website can be crawled.
+
+**Core Logic:**
+The current configuration allows all web crawlers to access and crawl the entire website without any restrictions.
+
+### Functional User Guide
+
+**Usage:**
+1. **Location:** Place the `robots.txt` file in the root directory of your website (e.g., `https://www.example.com/robots.txt`).
+2. **Configuration:**
+   - To allow all web crawlers to access the entire website, use the following configuration:
+     ```
+     User-agent: *
+     Disallow:
+     ```
+   - To disallow all web crawlers from accessing the entire website, use:
+     ```
+     User-agent: *
+     Disallow: /
+     ```
+   - To disallow specific parts of the website, specify the paths:
+     ```
+     User-agent: *
+     Disallow: /private/
+     Disallow: /tmp/
+     ```
+
+**Examples:**
+- Allow all web crawlers to access the entire website:
+  ```
+  User-agent: *
+  Disallow:
+  ```
+- Disallow all web crawlers from accessing the entire website:
+  ```
+  User-agent: *
+  Disallow: /
+  ```
+- Disallow all web crawlers from accessing specific directories:
+  ```
+  User-agent: *
+  Disallow: /admin/
+  Disallow: /login/
+  ```
+
+### Testing Checklist
+
+1. **Verify Accessibility:**
+   - Ensure that the `robots.txt` file is accessible at `https://www.example.com/robots.txt`.
+2. **Check Configuration:**
+   - Verify that the `User-agent` directive is correctly specified.
+   - Verify that the `Disallow` directive is correctly specified and matches the intended paths.
+3. **Crawler Behavior:**
+   - Use tools like Google Search Console to test how Googlebot interprets the `robots.txt` file.
+   - Use online robots.txt testers to validate the syntax and rules.
+4. **Edge Cases:**
+   - Test with different user-agents to ensure that specific rules are applied correctly.
+   - Test with various paths to ensure that the disallowed paths are correctly restricted.
+
 ## package.json
 
 ### Overview
