@@ -86,6 +86,79 @@ export default App;
 - Test with leading/trailing spaces in email and password fields.
 - Test rapid input changes to ensure state updates correctly.
 
+# Documentation for UserAuthForms Component
+
+## Technical Documentation
+
+### File Purpose
+The `UserAuthForms.js` file is a React component that manages the display of user authentication forms, specifically the Sign In and Sign Up forms. It allows users to switch between these two forms using buttons.
+
+### Architecture and Core Logic
+- **State Management:** 
+  - The component uses the `useState` hook to manage the `activeForm` state, which determines whether the Sign In or Sign Up form is currently active.
+- **Conditional Rendering:**
+  - Based on the value of `activeForm`, the component conditionally renders either the `SignInForm` or `SignUpForm` component.
+- **Event Handling:**
+  - The component includes buttons that allow users to switch between the Sign In and Sign Up forms. Clicking these buttons updates the `activeForm` state.
+- **Styling:**
+  - The component applies CSS classes for styling, including conditional classes to highlight the active form button.
+
+### Key Components
+- **State:**
+  - `activeForm`: A string that can be either 'signin' or 'signup', indicating which form is currently active.
+- **Functions:**
+  - `setActiveForm`: A function to update the `activeForm` state.
+- **Child Components:**
+  - `SignInForm`: The component for the Sign In form.
+  - `SignUpForm`: The component for the Sign Up form.
+
+## User Guide
+
+### How to Use
+1. **Initial Display:**
+   - By default, the Sign In form is displayed when the component is first rendered.
+2. **Switching Forms:**
+   - To switch to the Sign Up form, click the "Sign Up" button.
+   - To switch back to the Sign In form, click the "Sign In" button.
+3. **Privacy Policy:**
+   - A link to the Privacy Policy is provided at the bottom of the form. Clicking this link will open the Privacy Policy in a new tab.
+
+### Example Usage
+```jsx
+import React from 'react';
+import UserAuthForms from './UserAuthForms';
+
+const App = () => {
+  return (
+    <div>
+      <UserAuthForms />
+    </div>
+  );
+};
+
+export default App;
+```
+
+## Testing Checklist
+
+### Functional Testing
+- **Initial State:**
+  - Verify that the Sign In form is displayed by default.
+- **Form Switching:**
+  - Click the "Sign Up" button and verify that the Sign Up form is displayed.
+  - Click the "Sign In" button and verify that the Sign In form is displayed.
+- **Button States:**
+  - Verify that the active button has the `active` class applied.
+  - Verify that the inactive button does not have the `active` class applied.
+- **Privacy Policy Link:**
+  - Verify that the Privacy Policy link opens the correct URL in a new tab.
+
+### Edge Cases
+- **Rapid Switching:**
+  - Rapidly switch between the Sign In and Sign Up forms and ensure the component handles the state changes correctly.
+- **Accessibility:**
+  - Ensure that the buttons and links are accessible via keyboard navigation.
+
 ## Documentation for `SignUpForm.test.js`
 
 ### Technical Documentation
