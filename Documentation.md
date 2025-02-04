@@ -1,5 +1,63 @@
 # Documentation
 
+## src/setupTests.js
+
+### Technical Documentation
+
+**File Purpose:**
+The `setupTests.js` file is used to configure the testing environment for the project. It is specifically designed to set up the necessary configurations and imports required for running tests using Jest and the Testing Library.
+
+**Core Logic:**
+- The file imports `@testing-library/jest-dom`, which adds custom Jest matchers for asserting on DOM nodes. This allows for more readable and expressive test assertions, such as checking if an element has specific text content.
+
+**Key Components:**
+- **Import Statement:**
+  ```javascript
+  import '@testing-library/jest-dom';
+  ```
+  This import statement ensures that the custom matchers provided by `@testing-library/jest-dom` are available in all test files without needing to import them individually in each test file.
+
+### User Guide
+
+**How to Use:**
+1. **Setup:**
+   - Ensure that `setupTests.js` is located in the `src` directory of your project.
+   - This file will be automatically recognized and executed by Jest before running any tests.
+
+2. **Writing Tests:**
+   - With `@testing-library/jest-dom` imported globally, you can use its custom matchers in your test files. For example:
+     ```javascript
+     import { render } from '@testing-library/react';
+     import App from './App';
+
+     test('renders learn react link', () => {
+       const { getByText } = render(<App />);
+       const linkElement = getByText(/learn react/i);
+       expect(linkElement).toBeInTheDocument();
+     });
+     ```
+
+**Examples:**
+- **Checking Text Content:**
+  ```javascript
+  expect(element).toHaveTextContent(/react/i);
+  ```
+- **Checking Element Presence:**
+  ```javascript
+  expect(element).toBeInTheDocument();
+  ```
+
+### Testing Checklist
+
+- **Functional Testing:**
+  - Verify that the custom matchers from `@testing-library/jest-dom` are available in test files.
+  - Write tests to check various DOM properties using the custom matchers.
+  - Ensure that the setup file is correctly imported and executed before running tests.
+
+- **Edge Cases:**
+  - Test with different types of DOM elements to ensure matchers work as expected.
+  - Check the behavior when the setup file is missing or incorrectly configured.
+
 ## public/robots.txt
 
 ### Technical Documentation
