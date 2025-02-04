@@ -1,5 +1,96 @@
 # Documentation
 
+## UserAuthForms.js
+
+### File Overview
+
+#### Purpose:
+The `UserAuthForms.js` file is a React component that manages the display of user authentication forms, specifically the Sign In and Sign Up forms. It allows users to switch between these two forms using buttons.
+
+#### Architecture:
+- **State Management:** Utilizes React's `useState` hook to manage the active form state (`signin` or `signup`).
+- **Conditional Rendering:** Renders either the `SignInForm` or `SignUpForm` component based on the current state.
+- **Styling:** Applies CSS classes for styling and active state indication.
+- **Privacy Policy:** Includes a link to the privacy policy.
+
+#### Core Logic:
+- **State Initialization:**
+  ```javascript
+  const [activeForm, setActiveForm] = useState('signin');
+  ```
+  Initializes the `activeForm` state to `'signin'`.
+
+- **Form Switching:**
+  ```javascript
+  <button
+    data-testid="signin-button"
+    className={`switch-button ${activeForm === 'signin' ? 'active' : ''}`}
+    onClick={() => setActiveForm('signin')}
+  >
+    Sign In
+  </button>
+  <button
+    data-testid="signup-button"
+    className={`switch-button ${activeForm === 'signup' ? 'active' : ''}`}
+    onClick={() => setActiveForm('signup')}
+  >
+    Sign Up
+  </button>
+  ```
+  These buttons switch the `activeForm` state between `'signin'` and `'signup'`.
+
+- **Conditional Rendering:**
+  ```javascript
+  {activeForm === 'signin' ? <SignInForm /> : <SignUpForm />}
+  ```
+  Renders the `SignInForm` component if `activeForm` is `'signin'`, otherwise renders the `SignUpForm` component.
+
+### User Guide
+
+#### How to Use:
+1. **Initial View:**
+   - The component initially displays the Sign In form.
+2. **Switching Forms:**
+   - Click the "Sign In" button to view the Sign In form.
+   - Click the "Sign Up" button to view the Sign Up form.
+3. **Privacy Policy:**
+   - Click the "Privacy Policy" link at the bottom to view the privacy policy in a new tab.
+
+#### Example Usage:
+```javascript
+import React from 'react';
+import UserAuthForms from './UserAuthForms';
+
+function App() {
+  return (
+    <div className="App">
+      <UserAuthForms />
+    </div>
+  );
+}
+
+export default App;
+```
+
+### Testing Checklist
+
+#### Functional Testing:
+- **Initial State:**
+  - Verify that the Sign In form is displayed by default.
+- **Form Switching:**
+  - Click the "Sign In" button and ensure the Sign In form is displayed.
+  - Click the "Sign Up" button and ensure the Sign Up form is displayed.
+- **Active Button Styling:**
+  - Verify that the active button has the `active` class applied.
+- **Privacy Policy Link:**
+  - Click the "Privacy Policy" link and ensure it opens the correct URL in a new tab.
+
+#### Edge Cases:
+- **Rapid Switching:**
+  - Rapidly switch between the Sign In and Sign Up forms to ensure the component handles quick state changes gracefully.
+- **No State Persistence:**
+  - Ensure that the form state does not persist across page reloads (i.e., it should always start with the Sign In form).
+
 ## SignUpForm.test.js
 
 ### Technical Documentation
