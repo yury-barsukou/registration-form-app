@@ -1,5 +1,74 @@
 # Documentation for public/index.html
 
+### Documentation for src/reportWebVitals.js
+
+#### Technical Documentation
+
+**File Purpose:**
+The `reportWebVitals.js` file is designed to measure and report web performance metrics using the `web-vitals` library. These metrics help in understanding the performance of a web application and can be used to improve user experience.
+
+**Architecture and Core Logic:**
+- The file exports a single function `reportWebVitals`.
+- The `reportWebVitals` function takes a callback function `onPerfEntry` as an argument.
+- It checks if `onPerfEntry` is a function.
+- If it is, it dynamically imports the `web-vitals` library and retrieves several performance metrics functions: `getCLS`, `getFID`, `getFCP`, `getLCP`, and `getTTFB`.
+- Each of these functions is then called with `onPerfEntry` as an argument, which allows the callback to handle the performance entries.
+
+**Key Components:**
+- **Dynamic Import:** The `import('web-vitals')` statement is used to dynamically load the `web-vitals` library only when needed.
+- **Performance Metrics Functions:**
+  - `getCLS`: Cumulative Layout Shift
+  - `getFID`: First Input Delay
+  - `getFCP`: First Contentful Paint
+  - `getLCP`: Largest Contentful Paint
+  - `getTTFB`: Time to First Byte
+
+#### User Guide
+
+**How to Use:**
+1. **Import the Function:**
+   ```javascript
+   import reportWebVitals from './reportWebVitals';
+   ```
+2. **Define a Callback Function:**
+   Create a function that will handle the performance entries.
+   ```javascript
+   const handlePerfEntry = (entry) => {
+     console.log(entry);
+   };
+   ```
+3. **Call `reportWebVitals`:**
+   Pass the callback function to `reportWebVitals`.
+   ```javascript
+   reportWebVitals(handlePerfEntry);
+   ```
+
+**Example:**
+```javascript
+import reportWebVitals from './reportWebVitals';
+
+const handlePerfEntry = (entry) => {
+  console.log(entry);
+};
+
+reportWebVitals(handlePerfEntry);
+```
+
+#### Testing Checklist
+
+- **Functional Testing:**
+  - Ensure that `reportWebVitals` can be imported without errors.
+  - Verify that `reportWebVitals` calls the provided callback function with performance entries.
+  - Test with a valid function as `onPerfEntry` and ensure all metrics (`CLS`, `FID`, `FCP`, `LCP`, `TTFB`) are reported.
+  - Test with an invalid `onPerfEntry` (e.g., not a function) and ensure no errors are thrown.
+
+- **Edge Cases:**
+  - Pass `null` or `undefined` as `onPerfEntry` and ensure no errors occur.
+  - Pass an empty function and verify that it gets called without any issues.
+
+- **Performance Testing:**
+  - Measure the impact of dynamically importing the `web-vitals` library on the overall application performance.
+
 ### Documentation for src/index.js
 
 #### Technical Documentation
