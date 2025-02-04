@@ -68,6 +68,83 @@ The current configuration allows all web crawlers to access and crawl the entire
    - Test with different user-agents to ensure that specific rules are applied correctly.
    - Test with various paths to ensure that the disallowed paths are correctly restricted.
 
+## SignUpForm Component
+
+### Technical Documentation
+
+#### File: `src/SignUpForm.js`
+
+**Purpose:**
+The `SignUpForm.js` file implements a user registration form using React. The form collects user details such as first name, last name, email, and password. It includes validation for the email format and password strength.
+
+**Architecture:**
+- **State Management:** Uses React's `useState` hook to manage form data and validation states.
+- **Form Fields:** Includes input fields for first name, last name, email, and password.
+- **Validation:** 
+  - **Email:** Validates the email format using a regular expression.
+  - **Password:** Validates the password for the presence of uppercase letters, lowercase letters, numbers, and a minimum length of 8 characters.
+- **Form Submission:** Handles form submission by checking if all validations pass before logging the form data.
+
+**Core Logic:**
+- **State Variables:**
+  - `formData`: Stores the values of the form fields.
+  - `passwordValidations`: Stores the validation states for the password.
+  - `isEmailValid`: Stores the validation state for the email.
+- **Functions:**
+  - `handleInputChange`: Updates the state when an input field changes and triggers validation functions.
+  - `validatePassword`: Checks the password against validation criteria and updates the `passwordValidations` state.
+  - `validateEmail`: Checks the email format and updates the `isEmailValid` state.
+  - `isFormValid`: Checks if all form fields are valid.
+  - `handleSubmit`: Handles form submission, checks if the form is valid, and logs the form data.
+
+### Functional User Guide
+
+#### How to Use
+1. **First Name:**
+   - Enter your first name in the "First Name" field.
+   - The input is limited to 50 characters.
+2. **Last Name:**
+   - Enter your last name in the "Last Name" field.
+   - The input is limited to 50 characters.
+3. **Email:**
+   - Enter your email address in the "Email" field.
+   - The email format is validated automatically.
+   - If the email is invalid, an error message will be displayed.
+4. **Password:**
+   - Enter your password in the "Password" field.
+   - The password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long.
+   - The validation criteria are displayed below the password field and will change color to indicate if the criteria are met.
+5. **Submit:**
+   - Click the "Create Account" button to submit the form.
+   - The button will be disabled until all fields are valid.
+
+#### Example
+```jsx
+<SignUpForm />
+```
+
+### Testing Checklist
+
+#### Functional Testing
+- **First Name Field:**
+  - Test input with valid first names.
+  - Test input with more than 50 characters.
+- **Last Name Field:**
+  - Test input with valid last names.
+  - Test input with more than 50 characters.
+- **Email Field:**
+  - Test input with valid email addresses.
+  - Test input with invalid email formats.
+  - Verify that the error message appears for invalid emails.
+- **Password Field:**
+  - Test input with passwords that meet all criteria.
+  - Test input with passwords that do not meet one or more criteria.
+  - Verify that the validation messages change color based on the input.
+- **Form Submission:**
+  - Test form submission with all valid inputs.
+  - Test form submission with one or more invalid inputs.
+  - Verify that the form data is logged correctly on successful submission.
+
 ## SignInForm Component
 
 ### Technical Documentation
