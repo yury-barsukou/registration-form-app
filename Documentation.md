@@ -1,5 +1,73 @@
 # Documentation
 
+## public/robots.txt
+
+### Technical Documentation
+
+**Purpose:**
+The `robots.txt` file is used to manage and control the behavior of web crawlers and robots that visit the website. It specifies which parts of the website should not be accessed or crawled by these automated agents.
+
+**Structure:**
+- **User-agent:** This directive specifies the web crawler to which the rule applies. The asterisk (*) means that the rule applies to all web crawlers.
+- **Disallow:** This directive specifies the URLs that the specified user-agent is not allowed to crawl. An empty value means that there are no restrictions, and all parts of the website can be crawled.
+
+**Core Logic:**
+The current configuration allows all web crawlers to access and crawl the entire website without any restrictions.
+
+### Functional User Guide
+
+**Usage:**
+1. **Location:** Place the `robots.txt` file in the root directory of your website (e.g., `https://www.example.com/robots.txt`).
+2. **Configuration:**
+   - To allow all web crawlers to access the entire website, use the following configuration:
+     ```
+     User-agent: *
+     Disallow:
+     ```
+   - To disallow all web crawlers from accessing the entire website, use:
+     ```
+     User-agent: *
+     Disallow: /
+     ```
+   - To disallow specific parts of the website, specify the paths:
+     ```
+     User-agent: *
+     Disallow: /private/
+     Disallow: /tmp/
+     ```
+
+**Examples:**
+- Allow all web crawlers to access the entire website:
+  ```
+  User-agent: *
+  Disallow:
+  ```
+- Disallow all web crawlers from accessing the entire website:
+  ```
+  User-agent: *
+  Disallow: /
+  ```
+- Disallow all web crawlers from accessing specific directories:
+  ```
+  User-agent: *
+  Disallow: /admin/
+  Disallow: /login/
+  ```
+
+### Testing Checklist
+
+1. **Verify Accessibility:**
+   - Ensure that the `robots.txt` file is accessible at `https://www.example.com/robots.txt`.
+2. **Check Configuration:**
+   - Verify that the `User-agent` directive is correctly specified.
+   - Verify that the `Disallow` directive is correctly specified and matches the intended paths.
+3. **Crawler Behavior:**
+   - Use tools like Google Search Console to test how Googlebot interprets the `robots.txt` file.
+   - Use online robots.txt testers to validate the syntax and rules.
+4. **Edge Cases:**
+   - Test with different user-agents to ensure that specific rules are applied correctly.
+   - Test with various paths to ensure that the disallowed paths are correctly restricted.
+
 ## package.json
 
 ### Overview
