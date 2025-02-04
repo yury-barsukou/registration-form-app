@@ -26,6 +26,68 @@
 - **Reference Check:**
   - Ensure that the file path is correctly referenced in the HTML or any other relevant configuration files.
 
+# Documentation for public/robots.txt
+
+### Technical Documentation
+
+**File Purpose:**
+The `robots.txt` file is used to manage and control the behavior of web crawlers and robots that visit your website. It specifies which parts of the site should not be accessed or crawled by these automated agents.
+
+**File Location:**
+`public/robots.txt`
+
+**Core Logic:**
+- The file follows the standard defined by the [Robots Exclusion Protocol](https://www.robotstxt.org/robotstxt.html).
+- It contains directives that inform web crawlers about the sections of the website that should not be crawled.
+
+**Content Explanation:**
+```plaintext
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+```
+- `User-agent: *`: This directive applies to all web crawlers.
+- `Disallow:`: This directive indicates that no part of the site is disallowed from being crawled. Essentially, it allows all web crawlers to access all parts of the website.
+
+### User Guide
+
+**Purpose:**
+To control the access of web crawlers to your website.
+
+**Usage:**
+1. **Location:** Ensure the `robots.txt` file is placed in the root directory of your website (e.g., `public/robots.txt`).
+2. **Customization:** Modify the directives based on your requirements. For example, to disallow all web crawlers from accessing the `/private` directory, you would add:
+   ```plaintext
+   User-agent: *
+   Disallow: /private
+   ```
+
+**Examples:**
+- **Disallow a specific directory:**
+  ```plaintext
+  User-agent: *
+  Disallow: /private
+  ```
+- **Disallow a specific web crawler:**
+  ```plaintext
+  User-agent: Googlebot
+  Disallow: /no-google
+  ```
+
+### Testing Checklist
+
+1. **File Placement:**
+   - Ensure the `robots.txt` file is located in the root directory of the website.
+   
+2. **Syntax Validation:**
+   - Validate the syntax of the `robots.txt` file using tools like [Google's Robots Testing Tool](https://www.google.com/webmasters/tools/robots-testing-tool).
+
+3. **Directive Testing:**
+   - Test the directives to ensure they are working as expected. For example, verify that the specified directories or files are being disallowed for crawling.
+
+4. **Crawler Behavior:**
+   - Monitor the behavior of web crawlers using server logs or webmaster tools to ensure they are adhering to the directives specified in the `robots.txt` file.
+
 ### Technical Documentation
 
 #### File: `public/index.html`
