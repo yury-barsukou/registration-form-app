@@ -68,6 +68,235 @@ The current configuration allows all web crawlers to access and crawl the entire
    - Test with different user-agents to ensure that specific rules are applied correctly.
    - Test with various paths to ensure that the disallowed paths are correctly restricted.
 
+## SignUpForm Component
+
+### Technical Documentation
+
+#### File: `src/SignUpForm.js`
+
+**Purpose:**
+The `SignUpForm.js` file implements a user registration form using React. The form collects user details such as first name, last name, email, and password. It includes validation for the email format and password strength.
+
+**Architecture:**
+- **State Management:** Uses React's `useState` hook to manage form data and validation states.
+- **Form Fields:** Includes input fields for first name, last name, email, and password.
+- **Validation:** 
+  - **Email:** Validates the email format using a regular expression.
+  - **Password:** Validates the password for the presence of uppercase letters, lowercase letters, numbers, and a minimum length of 8 characters.
+- **Form Submission:** Handles form submission by checking if all validations pass before logging the form data.
+
+**Core Logic:**
+- **State Variables:**
+  - `formData`: Stores the values of the form fields.
+  - `passwordValidations`: Stores the validation states for the password.
+  - `isEmailValid`: Stores the validation state for the email.
+- **Functions:**
+  - `handleInputChange`: Updates the state when an input field changes and triggers validation functions.
+  - `validatePassword`: Checks the password against validation criteria and updates the `passwordValidations` state.
+  - `validateEmail`: Checks the email format and updates the `isEmailValid` state.
+  - `isFormValid`: Checks if all form fields are valid.
+  - `handleSubmit`: Handles form submission, checks if the form is valid, and logs the form data.
+
+### Functional User Guide
+
+#### How to Use
+1. **First Name:**
+   - Enter your first name in the "First Name" field.
+   - The input is limited to 50 characters.
+2. **Last Name:**
+   - Enter your last name in the "Last Name" field.
+   - The input is limited to 50 characters.
+3. **Email:**
+   - Enter your email address in the "Email" field.
+   - The email format is validated automatically.
+   - If the email is invalid, an error message will be displayed.
+4. **Password:**
+   - Enter your password in the "Password" field.
+   - The password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long.
+   - The validation criteria are displayed below the password field and will change color to indicate if the criteria are met.
+5. **Submit:**
+   - Click the "Create Account" button to submit the form.
+   - The button will be disabled until all fields are valid.
+
+#### Example
+```jsx
+<SignUpForm />
+```
+
+### Testing Checklist
+
+#### Functional Testing
+- **First Name Field:**
+  - Test input with valid first names.
+  - Test input with more than 50 characters.
+- **Last Name Field:**
+  - Test input with valid last names.
+  - Test input with more than 50 characters.
+- **Email Field:**
+  - Test input with valid email addresses.
+  - Test input with invalid email formats.
+  - Verify that the error message appears for invalid emails.
+- **Password Field:**
+  - Test input with passwords that meet all criteria.
+  - Test input with passwords that do not meet one or more criteria.
+  - Verify that the validation messages change color based on the input.
+- **Form Submission:**
+  - Test form submission with all valid inputs.
+  - Test form submission with one or more invalid inputs.
+  - Verify that the form data is logged correctly on successful submission.
+
+## SignInForm Component
+
+### Technical Documentation
+
+#### File: `src/SignInForm.js`
+
+**Purpose:**
+The `SignInForm.js` file implements a sign-in form component using React. This component allows users to input their email and password to sign in. It includes validation for email format and password length.
+
+**Architecture:**
+- **State Management:** Uses React's `useState` hook to manage form data and validation states.
+- **Form Handling:** Contains functions to handle input changes, validate email, and handle form submission.
+- **Validation:** Validates email format using a regular expression and ensures the password is at least 8 characters long.
+
+**Core Logic:**
+1. **State Initialization:**
+   - `signInData`: Stores email and password input values.
+   - `isEmailValid`: Tracks the validity of the email input.
+   - `isSignInPasswordValid`: Tracks the validity of the password input.
+
+2. **Input Change Handling:**
+   - `handleSignInInputChange`: Updates state based on user input and triggers validation functions.
+
+3. **Email Validation:**
+   - `validateEmail`: Uses a regular expression to validate the email format.
+
+4. **Form Validation:**
+   - `isSignInFormValid`: Checks if all form inputs are valid before allowing submission.
+
+5. **Form Submission:**
+   - `handleSignInSubmit`: Prevents default form submission, validates the form, and logs the form data if valid.
+
+### Functional User Guide
+
+#### How to Use the Sign-In Form Component
+
+1. **Import the Component:**
+   ```javascript
+   import SignInForm from './SignInForm';
+   ```
+
+2. **Render the Component:**
+   ```javascript
+   function App() {
+     return (
+       <div className="App">
+         <SignInForm />
+       </div>
+     );
+   }
+
+   export default App;
+   ```
+
+3. **User Interaction:**
+   - **Email Input:** Users can enter their email address. The component will validate the format and display an error message if invalid.
+   - **Password Input:** Users can enter their password. The component will ensure the password is at least 8 characters long and display an error message if invalid.
+   - **Forgot Password:** A link is provided for users to navigate to a password recovery page.
+   - **Submit Button:** The button is enabled only when both email and password inputs are valid. Clicking the button will log the form data to the console.
+
+### Testing Checklist
+
+1. **Email Validation:**
+   - Test with a valid email format (e.g., `user@example.com`).
+   - Test with an invalid email format (e.g., `user@com`, `user@.com`).
+
+2. **Password Validation:**
+   - Test with a password of fewer than 8 characters.
+   - Test with a password of 8 or more characters.
+
+3. **Form Submission:**
+   - Test form submission with valid email and password.
+   - Test form submission with invalid email and/or password (ensure the form is not submitted).
+
+4. **UI Elements:**
+   - Ensure the error messages are displayed correctly for invalid inputs.
+   - Verify the "Forgot Password?" link is functional.
+   - Check the submit button is enabled/disabled based on form validity.
+
+5. **Accessibility:**
+   - Ensure all form elements are accessible via keyboard navigation.
+   - Verify that screen readers can read the form labels and error messages.
+
+### SignUpForm.test.js
+
+#### File Purpose:
+The `SignUpForm.test.js` file contains a suite of tests for the `SignUpForm` component. These tests ensure that the form renders correctly, validates user input, and handles form submission as expected.
+
+#### Technical Documentation:
+
+##### Key Components:
+1. **Constants:**
+   - `LABELS`: An object containing regex patterns to match form field labels.
+   - `BUTTON_TEXT`: A regex pattern to match the "Create Account" button text.
+   - `VALID_EMAIL` and `VALID_PASSWORD`: Constants holding valid email and password values for testing.
+
+2. **Helper Function:**
+   - `fillOutForm(overrides)`: A function to fill out the form fields with default or overridden values.
+
+##### Test Suites:
+1. **Rendering Tests:**
+   - Ensures that all form fields and the submit button are rendered.
+
+2. **Field Entry Tests:**
+   - Uses `test.each` to iterate over each form field and check if they accept input correctly.
+
+3. **Form Validation Tests:**
+   - Validates the email format and password criteria (e.g., length, character types).
+
+4. **Form Submission Tests:**
+   - Checks if the "Create Account" button is enabled/disabled based on form validity.
+   - Mocks `console.log` to verify form submission data.
+
+#### Functional User Guide:
+
+##### How to Use:
+1. **Setup:**
+   - Ensure you have the necessary dependencies installed, including `@testing-library/react` and `jest`.
+
+2. **Running Tests:**
+   - Execute the test suite using a test runner like Jest:
+     ```bash
+     npm test src/SignUpForm.test.js
+     ```
+
+3. **Understanding Test Output:**
+   - The test runner will display which tests passed or failed, providing detailed information on any failures.
+
+##### Example:
+To run the tests and see the results:
+```bash
+npm test src/SignUpForm.test.js
+```
+
+#### Testing Checklist:
+
+1. **Rendering:**
+   - [ ] Verify all form fields (`First Name`, `Last Name`, `Email`, `Password`) are rendered.
+   - [ ] Check if the "Create Account" button is present.
+
+2. **Field Entry:**
+   - [ ] Ensure each form field accepts input correctly.
+
+3. **Form Validation:**
+   - [ ] Test email validation with both valid and invalid email formats.
+   - [ ] Test password validation for length and character criteria.
+
+4. **Form Submission:**
+   - [ ] Verify the "Create Account" button is enabled with valid form data.
+   - [ ] Verify the "Create Account" button is disabled with invalid form data.
+   - [ ] Check if `console.log` is called with the correct data on form submission.
+
 ## src/index.js
 
 ### Technical Documentation
