@@ -68,6 +68,65 @@ The current configuration allows all web crawlers to access and crawl the entire
    - Test with different user-agents to ensure that specific rules are applied correctly.
    - Test with various paths to ensure that the disallowed paths are correctly restricted.
 
+## src/index.js
+
+### Technical Documentation
+
+**File Purpose:**
+The `src/index.js` file serves as the entry point for the React application. It is responsible for rendering the root component into the DOM and initializing performance reporting.
+
+**Architecture and Core Logic:**
+1. **Imports:**
+   - `React`: The core React library for building user interfaces.
+   - `ReactDOM`: The library for rendering React components to the DOM.
+   - `./index.css`: The main CSS file for styling the application.
+   - `UserAuthForms`: The main component of the application, responsible for user authentication forms.
+   - `reportWebVitals`: A utility for measuring and reporting web vitals for performance monitoring.
+
+2. **Root Rendering:**
+   - The `ReactDOM.createRoot` method is used to create a root DOM node where the React application will be mounted.
+   - The `root.render` method is called to render the `UserAuthForms` component wrapped in `React.StrictMode` for highlighting potential problems in the application.
+
+3. **Performance Reporting:**
+   - The `reportWebVitals` function is called to start measuring and reporting performance metrics.
+
+**Critical Algorithms or Design Patterns:**
+- **Strict Mode:** The use of `React.StrictMode` helps in identifying potential issues in the application by activating additional checks and warnings.
+
+### User Guide
+
+**How to Use:**
+1. **Setup:**
+   - Ensure that all dependencies are installed by running `npm install` or `yarn install` in the project directory.
+
+2. **Running the Application:**
+   - Start the development server by running `npm start` or `yarn start`.
+   - Open a web browser and navigate to `http://localhost:3000` to view the application.
+
+3. **Main Component:**
+   - The `UserAuthForms` component is the primary component rendered by the application. It handles user authentication forms such as login and registration.
+
+**Example Usage:**
+- The application will automatically render the `UserAuthForms` component when accessed in the browser. Users can interact with the authentication forms to log in or register.
+
+### Testing Checklist
+
+**Functional Testing:**
+1. **Root Component Rendering:**
+   - Verify that the `UserAuthForms` component is rendered correctly in the DOM.
+   - Ensure that the application does not produce any console errors or warnings.
+
+2. **Performance Reporting:**
+   - Check that the `reportWebVitals` function is called and performance metrics are logged or sent to an analytics endpoint.
+
+**Edge Cases:**
+- Test the application with different screen sizes to ensure responsive design.
+- Verify that the application handles invalid or unexpected input in the authentication forms gracefully.
+
+**Key Workflows:**
+- Test the user login and registration workflows to ensure they function as expected.
+- Validate that the application maintains proper state and updates the UI accordingly.
+
 ## SignUpForm Component
 
 ### Technical Documentation
