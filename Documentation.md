@@ -78,102 +78,78 @@ The file is structured with various CSS classes that target specific elements wi
 5. **Responsive Design**:
    - Test the styles on different screen sizes to ensure that the layout and spacing are responsive and visually appealing.
 
-## UserAuthForms.js
+## CSS Files
 
-### Technical Documentation
+### `src/index.css`
 
-#### Purpose
-The `UserAuthForms.js` file is a React component that provides a user interface for switching between Sign In and Sign Up forms. It manages the state to toggle between these forms and renders the appropriate form based on the current state.
+#### Technical Documentation
 
-#### Architecture
-- **State Management:** Uses React's `useState` hook to manage the active form state (`signin` or `signup`).
-- **Components Used:**
-  - `SignInForm`: Component for the Sign In form.
-  - `SignUpForm`: Component for the Sign Up form.
-- **CSS:** Imports styles from `UserAuthForms.css`.
+**File Purpose:**
+The `src/index.css` file is a CSS stylesheet that provides basic styling for the web application. It sets default styles for the `body` and `code` elements to ensure a consistent appearance across different browsers and platforms.
 
-#### Core Logic
-- **State Initialization:**
-  ```javascript
-  const [activeForm, setActiveForm] = useState('signin');
-  ```
-  Initializes the state to determine which form is currently active. The default state is set to `'signin'`.
+**Architecture and Core Logic:**
+- **Global Styles:**
+  - The `body` selector sets the margin to `0` and applies a default font stack that includes system fonts and common web fonts. This ensures that the text is rendered smoothly and consistently.
+  - The `code` selector applies a monospace font stack to ensure that code snippets are displayed in a fixed-width font, which is essential for readability and alignment.
 
-- **Form Toggle:**
-  ```javascript
-  <button
-    data-testid="signin-button"
-    className={`switch-button ${activeForm === 'signin' ? 'active' : ''}`}
-    onClick={() => setActiveForm('signin')}
-  >
-    Sign In
-  </button>
-  <button
-    data-testid="signup-button"
-    className={`switch-button ${activeForm === 'signup' ? 'active' : ''}`}
-    onClick={() => setActiveForm('signup')}
-  >
-    Sign Up
-  </button>
-  ```
-  These buttons allow the user to switch between the Sign In and Sign Up forms. The `onClick` event updates the `activeForm` state.
+**CSS Rules:**
+- `body`:
+  - `margin: 0;`: Removes the default margin around the body element.
+  - `font-family`: Sets a stack of fonts to ensure the text is rendered in a consistent and smooth manner.
+  - `-webkit-font-smoothing: antialiased;`: Improves the appearance of text in WebKit-based browsers.
+  - `-moz-osx-font-smoothing: grayscale;`: Improves the appearance of text in Firefox on macOS.
+- `code`:
+  - `font-family`: Sets a stack of monospace fonts to ensure code snippets are displayed in a fixed-width font.
 
-- **Conditional Rendering:**
-  ```javascript
-  {activeForm === 'signin' ? <SignInForm /> : <SignUpForm />}
-  ```
-  Renders the `SignInForm` component if the `activeForm` state is `'signin'`, otherwise renders the `SignUpForm` component.
+#### Functional User Guide
 
-### Functional User Guide
+**How to Use:**
+1. **Include the CSS File:**
+   - Ensure that the `src/index.css` file is linked in the HTML file of your web application. This can be done by adding the following line within the `<head>` section of your HTML file:
+     ```html
+     <link rel="stylesheet" href="src/index.css">
+     ```
 
-#### How to Use
-1. **Initial View:**
-   - The component initially displays the Sign In form.
-   - The header will read "Sign In".
+2. **Body Styling:**
+   - The `body` element will automatically have no margin and will use the specified font stack. This ensures that the entire viewport is utilized and the text is rendered smoothly.
 
-2. **Switching Forms:**
-   - Click the "Sign Up" button to switch to the Sign Up form.
-   - The header will change to "Sign Up".
-   - Click the "Sign In" button to switch back to the Sign In form.
+3. **Code Styling:**
+   - Any `<code>` elements within your HTML will automatically use the specified monospace font stack. This ensures that code snippets are displayed in a readable and aligned manner.
 
-3. **Privacy Policy:**
-   - A link to the Privacy Policy is provided at the bottom of the forms.
-   - Clicking the link will open the Privacy Policy in a new tab.
-
-#### Example Usage
-To use the `UserAuthForms` component, simply import and include it in your JSX:
-```javascript
-import UserAuthForms from './UserAuthForms';
-
-function App() {
-  return (
-    <div className="App">
-      <UserAuthForms />
-    </div>
-  );
-}
-
-export default App;
+**Example:**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Example</title>
+  <link rel="stylesheet" href="src/index.css">
+</head>
+<body>
+  <h1>Hello, World!</h1>
+  <p>This is a sample paragraph.</p>
+  <code>console.log('Hello, World!');</code>
+</body>
+</html>
 ```
 
-### Testing Checklist
+#### Testing Checklist
 
-- **Initial Render:**
-  - Verify that the Sign In form is displayed by default.
-  - Check that the header reads "Sign In".
+- **Body Element:**
+  - Verify that the body element has no margin.
+  - Check that the text within the body element uses the specified font stack.
+  - Ensure that text rendering is smooth in WebKit-based browsers and Firefox on macOS.
 
-- **Form Switching:**
-  - Click the "Sign Up" button and verify that the Sign Up form is displayed.
-  - Check that the header changes to "Sign Up".
-  - Click the "Sign In" button and verify that the Sign In form is displayed again.
-  - Check that the header changes back to "Sign In".
+- **Code Element:**
+  - Verify that code snippets within `<code>` elements use the specified monospace font stack.
+  - Check that the code snippets are displayed in a fixed-width font for readability and alignment.
 
-- **Button States:**
-  - Ensure that the active button has the `active` class applied.
-  - Verify that the inactive button does not have the `active` class.
+- **Cross-Browser Compatibility:**
+  - Test the styles in different browsers (e.g., Chrome, Firefox, Safari, Edge) to ensure consistent appearance.
+  - Verify that the font smoothing properties work as expected in WebKit-based browsers and Firefox on macOS.
 
-- **Privacy Policy Link:**
-  - Verify that the Privacy Policy link is present.
-  - Check that clicking the link opens the Privacy Policy in a new tab.
+- **Responsive Design:**
+  - Ensure that the styles work well on different screen sizes and devices.
 
 
