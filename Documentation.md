@@ -1,3 +1,81 @@
+## src/reportWebVitals.js
+
+### Technical Documentation
+
+#### File: `src/reportWebVitals.js`
+
+**Purpose:**
+The `reportWebVitals.js` file is designed to measure and report web performance metrics using the `web-vitals` library. These metrics help in understanding the performance of a web application and identifying areas for improvement.
+
+**Architecture:**
+- The file exports a single function `reportWebVitals`.
+- This function takes a callback function `onPerfEntry` as an argument.
+- If `onPerfEntry` is a valid function, it dynamically imports the `web-vitals` library and invokes several performance measurement functions, passing `onPerfEntry` as a callback to each.
+
+**Core Logic:**
+- **Dynamic Import:** The `import('web-vitals')` statement is used to dynamically load the `web-vitals` library only when needed, which can help in reducing the initial load time of the application.
+- **Performance Metrics:** The following functions from `web-vitals` are used to measure different performance metrics:
+  - `getCLS`: Cumulative Layout Shift
+  - `getFID`: First Input Delay
+  - `getFCP`: First Contentful Paint
+  - `getLCP`: Largest Contentful Paint
+  - `getTTFB`: Time to First Byte
+
+### Functional User Guide
+
+#### How to Use `reportWebVitals`
+
+1. **Import the Function:**
+   ```javascript
+   import reportWebVitals from './reportWebVitals';
+   ```
+
+2. **Define a Callback Function:**
+   Define a function that will handle the performance entries. This function will be called with each performance metric.
+   ```javascript
+   const handlePerfEntry = (entry) => {
+     console.log(entry);
+   };
+   ```
+
+3. **Invoke `reportWebVitals`:**
+   Pass the callback function to `reportWebVitals`.
+   ```javascript
+   reportWebVitals(handlePerfEntry);
+   ```
+
+**Example:**
+```javascript
+import reportWebVitals from './reportWebVitals';
+
+const handlePerfEntry = (entry) => {
+  console.log(entry);
+};
+
+reportWebVitals(handlePerfEntry);
+```
+
+### Testing Checklist
+
+- **Basic Functionality:**
+  - Ensure that `reportWebVitals` can be imported without errors.
+  - Verify that `reportWebVitals` is a function.
+
+- **Callback Invocation:**
+  - Pass a valid function to `reportWebVitals` and ensure that it gets called with performance entries.
+  - Test with an invalid argument (e.g., `null`, `undefined`, non-function) and ensure no errors are thrown.
+
+- **Performance Metrics:**
+  - Verify that each of the following metrics is reported:
+    - Cumulative Layout Shift (CLS)
+    - First Input Delay (FID)
+    - First Contentful Paint (FCP)
+    - Largest Contentful Paint (LCP)
+    - Time to First Byte (TTFB)
+
+- **Dynamic Import:**
+  - Ensure that the `web-vitals` library is only loaded when `reportWebVitals` is called with a valid function.
+
 ## CSS Files
 
 ### `src/index.css`
@@ -131,6 +209,84 @@ To add a new component to the application, follow these steps:
 
 5. **Strict Mode:**
    - Verify that the application runs in `React.StrictMode` and any potential issues are highlighted.
+
+## src/reportWebVitals.js
+
+### Technical Documentation
+
+#### File: `src/reportWebVitals.js`
+
+**Purpose:**
+The `reportWebVitals.js` file is designed to measure and report web performance metrics using the `web-vitals` library. These metrics help in understanding the performance of a web application and identifying areas for improvement.
+
+**Architecture:**
+- The file exports a single function `reportWebVitals`.
+- This function takes a callback function `onPerfEntry` as an argument.
+- If `onPerfEntry` is a valid function, it dynamically imports the `web-vitals` library and invokes several performance measurement functions, passing `onPerfEntry` as a callback to each.
+
+**Core Logic:**
+- **Dynamic Import:** The `import('web-vitals')` statement is used to dynamically load the `web-vitals` library only when needed, which can help in reducing the initial load time of the application.
+- **Performance Metrics:** The following functions from `web-vitals` are used to measure different performance metrics:
+  - `getCLS`: Cumulative Layout Shift
+  - `getFID`: First Input Delay
+  - `getFCP`: First Contentful Paint
+  - `getLCP`: Largest Contentful Paint
+  - `getTTFB`: Time to First Byte
+
+### Functional User Guide
+
+#### How to Use `reportWebVitals`
+
+1. **Import the Function:**
+   ```javascript
+   import reportWebVitals from './reportWebVitals';
+   ```
+
+2. **Define a Callback Function:**
+   Define a function that will handle the performance entries. This function will be called with each performance metric.
+   ```javascript
+   const handlePerfEntry = (entry) => {
+     console.log(entry);
+   };
+   ```
+
+3. **Invoke `reportWebVitals`:**
+   Pass the callback function to `reportWebVitals`.
+   ```javascript
+   reportWebVitals(handlePerfEntry);
+   ```
+
+**Example:**
+```javascript
+import reportWebVitals from './reportWebVitals';
+
+const handlePerfEntry = (entry) => {
+  console.log(entry);
+};
+
+reportWebVitals(handlePerfEntry);
+```
+
+### Testing Checklist
+
+- **Basic Functionality:**
+  - Ensure that `reportWebVitals` can be imported without errors.
+  - Verify that `reportWebVitals` is a function.
+
+- **Callback Invocation:**
+  - Pass a valid function to `reportWebVitals` and ensure that it gets called with performance entries.
+  - Test with an invalid argument (e.g., `null`, `undefined`, non-function) and ensure no errors are thrown.
+
+- **Performance Metrics:**
+  - Verify that each of the following metrics is reported:
+    - Cumulative Layout Shift (CLS)
+    - First Input Delay (FID)
+    - First Contentful Paint (FCP)
+    - Largest Contentful Paint (LCP)
+    - Time to First Byte (TTFB)
+
+- **Dynamic Import:**
+  - Ensure that the `web-vitals` library is only loaded when `reportWebVitals` is called with a valid function.
 
 ## CSS Files
 
