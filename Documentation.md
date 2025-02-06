@@ -78,6 +78,102 @@ The file is structured with various CSS classes that target specific elements wi
 5. **Responsive Design**:
    - Test the styles on different screen sizes to ensure that the layout and spacing are responsive and visually appealing.
 
-By following this documentation, you can effectively use and test the styles provided in the `UserAuthForms.css` file to create consistent and user-friendly authentication forms.
+## UserAuthForms.js
+
+### Technical Documentation
+
+#### Purpose
+The `UserAuthForms.js` file is a React component that provides a user interface for switching between Sign In and Sign Up forms. It manages the state to toggle between these forms and renders the appropriate form based on the current state.
+
+#### Architecture
+- **State Management:** Uses React's `useState` hook to manage the active form state (`signin` or `signup`).
+- **Components Used:**
+  - `SignInForm`: Component for the Sign In form.
+  - `SignUpForm`: Component for the Sign Up form.
+- **CSS:** Imports styles from `UserAuthForms.css`.
+
+#### Core Logic
+- **State Initialization:**
+  ```javascript
+  const [activeForm, setActiveForm] = useState('signin');
+  ```
+  Initializes the state to determine which form is currently active. The default state is set to `'signin'`.
+
+- **Form Toggle:**
+  ```javascript
+  <button
+    data-testid="signin-button"
+    className={`switch-button ${activeForm === 'signin' ? 'active' : ''}`}
+    onClick={() => setActiveForm('signin')}
+  >
+    Sign In
+  </button>
+  <button
+    data-testid="signup-button"
+    className={`switch-button ${activeForm === 'signup' ? 'active' : ''}`}
+    onClick={() => setActiveForm('signup')}
+  >
+    Sign Up
+  </button>
+  ```
+  These buttons allow the user to switch between the Sign In and Sign Up forms. The `onClick` event updates the `activeForm` state.
+
+- **Conditional Rendering:**
+  ```javascript
+  {activeForm === 'signin' ? <SignInForm /> : <SignUpForm />}
+  ```
+  Renders the `SignInForm` component if the `activeForm` state is `'signin'`, otherwise renders the `SignUpForm` component.
+
+### Functional User Guide
+
+#### How to Use
+1. **Initial View:**
+   - The component initially displays the Sign In form.
+   - The header will read "Sign In".
+
+2. **Switching Forms:**
+   - Click the "Sign Up" button to switch to the Sign Up form.
+   - The header will change to "Sign Up".
+   - Click the "Sign In" button to switch back to the Sign In form.
+
+3. **Privacy Policy:**
+   - A link to the Privacy Policy is provided at the bottom of the forms.
+   - Clicking the link will open the Privacy Policy in a new tab.
+
+#### Example Usage
+To use the `UserAuthForms` component, simply import and include it in your JSX:
+```javascript
+import UserAuthForms from './UserAuthForms';
+
+function App() {
+  return (
+    <div className="App">
+      <UserAuthForms />
+    </div>
+  );
+}
+
+export default App;
+```
+
+### Testing Checklist
+
+- **Initial Render:**
+  - Verify that the Sign In form is displayed by default.
+  - Check that the header reads "Sign In".
+
+- **Form Switching:**
+  - Click the "Sign Up" button and verify that the Sign Up form is displayed.
+  - Check that the header changes to "Sign Up".
+  - Click the "Sign In" button and verify that the Sign In form is displayed again.
+  - Check that the header changes back to "Sign In".
+
+- **Button States:**
+  - Ensure that the active button has the `active` class applied.
+  - Verify that the inactive button does not have the `active` class.
+
+- **Privacy Policy Link:**
+  - Verify that the Privacy Policy link is present.
+  - Check that clicking the link opens the Privacy Policy in a new tab.
 
 
