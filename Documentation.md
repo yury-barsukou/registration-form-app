@@ -1,54 +1,83 @@
-# Documentation
-
-## SignInForm.js
+## UserAuthForms.css
 
 ### Technical Documentation
 
-**Purpose:**
-The `SignInForm.js` file implements a sign-in form component using React. It allows users to input their email and password to sign in.
+#### Purpose
+The `UserAuthForms.css` file contains the CSS styles for the user authentication forms, including login, registration, and password reset forms. The styles ensure a consistent and visually appealing design across all user authentication-related components.
 
-**Architecture:**
-- The component uses React functional components and hooks (`useState`) to manage state.
-- The form includes input fields for email and password, with validation for both fields.
-- The form submission is handled by the `handleSignInSubmit` function, which currently logs the sign-in data to the console.
+#### Architecture and Core Logic
+The file is structured with various CSS classes that target specific elements within the user authentication forms. The styles are designed to provide a clean and user-friendly interface, with attention to layout, spacing, and interactive elements.
 
-**Core Logic:**
-- `useState` is used to manage the state of the sign-in data (`signInData`), email validation (`isEmailValid`), and password validation (`isSignInPasswordValid`).
-- `handleSignInInputChange` updates the state based on user input and triggers validation functions.
-- `validateEmail` checks if the email input matches a regular expression pattern for valid email addresses.
-- `isSignInFormValid` checks if both email and password inputs are valid.
-- `handleSignInSubmit` prevents the default form submission behavior and logs the sign-in data if the form is valid.
+#### Key Components
+- **.user-entry**: Styles the main container for the user entry forms, setting a maximum width, centering the content, and adding padding and a box shadow.
+- **.text-center**: Centers the text within the element.
+- **.main-header**: Styles the main header with a larger font size and bottom margin.
+- **.input-group**: Adds margin and sets the width for input groups.
+- **.form-control**: Styles the form controls with padding, border, and border-radius.
+- **.space-above-large**: Centers the content within a flex container.
+- **.next-button**: Styles the primary button with padding, background color, and hover effects.
+- **.password-validation**: Styles the password validation messages with margin and text alignment.
+- **.email-validation-message.invalid, .password-validation-message.invalid**: Styles the validation messages for invalid inputs with red color and smaller font size.
+- **.venue-checkbox-container**: Adds margin and centers the content for the checkbox container.
+- **.legal-link**: Styles the legal links with color and hover effects.
+- **.privacy-policy**: Adds margin and centers the text for the privacy policy section.
+- **.checkbox-container**: Centers the content for the checkbox container.
+- **.form-switch**: Styles the container for form switch buttons with flexbox and margin.
+- **.switch-button**: Styles the switch buttons with padding, margin, border, and background color.
+- **.switch-button.active**: Adds a bottom border to the active switch button.
+- **.forgot-password**: Styles the forgot password link with text alignment and margin.
+- **.forgot-password a**: Styles the anchor tag within the forgot password link with color and hover effects.
 
 ### Functional User Guide
 
-1. **Email Input:**
-   - Enter a valid email address in the email input field.
-   - If the email is invalid, an error message will be displayed below the input field.
-
-2. **Password Input:**
-   - Enter a password with at least 8 characters in the password input field.
-   - If the password is invalid, an error message will be displayed below the input field.
-
-3. **Form Submission:**
-   - Click the 'Sign In' button to submit the form.
-   - The button will be disabled if the email or password inputs are invalid.
-   - On successful submission, the sign-in data will be logged to the console.
+#### How to Use
+1. **Include the CSS File**: Ensure that the `UserAuthForms.css` file is included in your HTML or JavaScript file.
+   ```html
+   <link rel="stylesheet" href="path/to/UserAuthForms.css">
+   ```
+2. **Apply Classes**: Use the provided CSS classes in your HTML elements to style the user authentication forms.
+   ```html
+   <div class="user-entry">
+       <h1 class="main-header text-center">Login</h1>
+       <div class="input-group">
+           <label for="email">Email</label>
+           <input type="email" id="email" class="form-control">
+       </div>
+       <div class="input-group">
+           <label for="password">Password</label>
+           <input type="password" id="password" class="form-control">
+       </div>
+       <button class="next-button">Login</button>
+       <div class="forgot-password">
+           <a href="#">Forgot Password?</a>
+       </div>
+   </div>
+   ```
+3. **Customize Styles**: If needed, you can customize the styles by overriding the existing classes in your own CSS file.
 
 ### Testing Checklist
 
-- **Email Validation:**
-  - Test with valid email addresses (e.g., `user@example.com`).
-  - Test with invalid email addresses (e.g., `user@com`, `user@.com`).
-  - Ensure the error message is displayed for invalid emails.
+1. **Layout and Spacing**:
+   - Verify that the `.user-entry` container is centered and has appropriate padding and box shadow.
+   - Check that the `.main-header` has the correct font size and margin.
+   - Ensure that the `.input-group` elements have the correct margin and width.
 
-- **Password Validation:**
-  - Test with passwords of various lengths (e.g., less than 8 characters, 8 or more characters).
-  - Ensure the error message is displayed for passwords with less than 8 characters.
+2. **Form Controls**:
+   - Verify that the `.form-control` elements have the correct padding, border, and border-radius.
+   - Check that the `.next-button` has the correct background color, padding, and hover effects.
+   - Ensure that the `.next-button.btn-disabled` has the correct disabled styles.
 
-- **Form Submission:**
-  - Test form submission with valid email and password.
-  - Test form submission with invalid email and/or password.
-  - Ensure the 'Sign In' button is disabled when the form is invalid.
-  - Verify that the sign-in data is logged to the console on successful submission.
+3. **Validation Messages**:
+   - Verify that the `.email-validation-message.invalid` and `.password-validation-message.invalid` have the correct red color and font size.
+
+4. **Interactive Elements**:
+   - Check that the `.legal-link` and `.forgot-password a` have the correct color and hover effects.
+   - Ensure that the `.switch-button` elements have the correct padding, margin, border, and background color.
+   - Verify that the `.switch-button.active` has the correct bottom border.
+
+5. **Responsive Design**:
+   - Test the styles on different screen sizes to ensure that the layout and spacing are responsive and visually appealing.
+
+By following this documentation, you can effectively use and test the styles provided in the `UserAuthForms.css` file to create consistent and user-friendly authentication forms.
 
 
