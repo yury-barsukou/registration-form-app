@@ -56,14 +56,28 @@ export default App;
 2. **Invalid Email**: Enter an invalid email format. An error message should be displayed, and the form should not be submitted.
 3. **Short Password**: Enter a password with fewer than 8 characters. An error message should be displayed, and the form should not be submitted.
 4. **Empty Fields**: Leave both fields empty and attempt to submit the form. Error messages should be displayed for both fields.
+5. **Form Rendering**: Ensure that all form fields and the submit button are rendered correctly.
+6. **Field Entry**: Test that each form field allows entry of text.
+7. **Email Validation**: Test that the email field validates the email format correctly.
+8. **Password Validation**: Test that the password field validates the password criteria correctly.
+9. **Form Submission**: Test that the form can be submitted with valid data and that the submit button is enabled/disabled based on form validity.
 
 ### Edge Cases
 1. **Email with Special Characters**: Test emails with special characters to ensure they are validated correctly.
 2. **Password with Spaces**: Test passwords that include spaces to ensure they are counted towards the character limit.
+3. **Password Missing Criteria**: Test passwords that are missing one or more criteria (uppercase, lowercase, number) to ensure they are validated correctly.
+4. **Invalid Email Format**: Enter an invalid email format and ensure that an error message is displayed.
+5. **Short Password**: Enter a password that is too short and ensure that an error message is displayed.
+6. **Missing Password Criteria**: Enter a password that is missing one or more criteria (uppercase, lowercase, number) and ensure that the appropriate validation messages are displayed.
 
 ### Key Workflows
 1. **User Sign-In**: Ensure that the user can sign in with valid credentials and that the form data is handled correctly.
 2. **Form Validation**: Verify that the form validation works as expected and that appropriate error messages are displayed for invalid inputs.
+3. **User Sign-Up**: Ensure that the user can sign up with valid credentials and that the form data is handled correctly.
+4. **Password Validation**: Ensure that the password validation messages update correctly based on the entered password.
+5. **Form Rendering**: Verify that the form renders with all fields and the submit button.
+6. **Field Entry**: Ensure that each form field allows text entry and updates the state correctly.
+7. **Form Submission**: Ensure that the form can be submitted with valid data and that the form data is handled correctly.
 
 ## SignUpForm.js
 
