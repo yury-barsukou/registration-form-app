@@ -1,5 +1,63 @@
 # Documentation
 
+## index.css
+
+### Purpose
+
+The `index.css` file contains the global CSS styles for the application. It sets the default styles for the `body` and `code` elements to ensure a consistent look and feel across the application.
+
+### Architecture
+
+The file defines two main CSS rules:
+1. **Body Styles**: Sets the margin to 0, applies a system font stack for better font rendering across different platforms, and enables font smoothing for better text rendering.
+2. **Code Styles**: Sets a monospaced font stack for code elements to ensure that code snippets are displayed in a consistent and readable manner.
+
+### Core Logic
+
+1. **Body Styles**:
+   - `margin: 0;`: Removes the default margin from the body element.
+   - `font-family`: Applies a system font stack to ensure that the text is rendered using the best available font on the user's system.
+   - `-webkit-font-smoothing: antialiased;`: Enables font smoothing for better text rendering on WebKit-based browsers.
+   - `-moz-osx-font-smoothing: grayscale;`: Enables font smoothing for better text rendering on macOS.
+
+2. **Code Styles**:
+   - `font-family`: Applies a monospaced font stack to ensure that code snippets are displayed in a consistent and readable manner.
+
+### Usage Instructions
+
+To use the styles defined in `index.css`, simply import the file into your main JavaScript or TypeScript file (e.g., `index.js` or `index.tsx`) as follows:
+
+```javascript
+import './index.css';
+```
+
+This will apply the global styles to your application.
+
+### Testing Guidelines
+
+Since `index.css` contains global styles, testing should focus on ensuring that these styles are applied correctly across the application. Consider the following test cases:
+
+1. **Body Margin**: Verify that the body element has no margin.
+2. **Font Family**: Verify that the text is rendered using the system font stack.
+3. **Font Smoothing**: Verify that font smoothing is enabled on WebKit-based browsers and macOS.
+4. **Code Font Family**: Verify that code snippets are displayed using the monospaced font stack.
+
+### Aggregated Testing Guidelines
+
+To test the components and styles in the application, consider the following test cases and edge cases:
+
+1. **Valid Form Submission**: Ensure that forms submit successfully when all fields are filled out correctly and the inputs are valid.
+2. **Invalid Email**: Ensure that forms display an error message when an invalid email is entered.
+3. **Password Criteria**: Ensure that forms display error messages when the password does not meet the required criteria (uppercase letter, lowercase letter, number, and minimum length of 8 characters).
+4. **Empty Fields**: Ensure that forms do not submit when any of the required fields are empty.
+5. **Real-time Validation**: Ensure that validation messages update in real-time as the user types in the input fields.
+6. **Body Margin**: Verify that the body element has no margin.
+7. **Font Family**: Verify that the text is rendered using the system font stack.
+8. **Font Smoothing**: Verify that font smoothing is enabled on WebKit-based browsers and macOS.
+9. **Code Font Family**: Verify that code snippets are displayed using the monospaced font stack.
+
+By following these guidelines, you can ensure that the components and styles in your application are functioning correctly and providing a consistent user experience.
+
 ## SignUpForm.js
 
 ### Purpose
