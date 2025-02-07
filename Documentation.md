@@ -27,4 +27,32 @@ The `SignInForm.js` file contains a React component that renders a sign-in form 
    - Enter a password with at least 8 characters.
    - If the password is too short, an error message will be displayed.
 3. **Form Submission:**
-   - Click the 
+   - Click the "Sign In" button to submit the form.
+   - The button will be disabled if the form is invalid.
+
+### Testing Checklist
+
+- **Email Validation:**
+  - Test with a valid email address.
+  - Test with an invalid email address (e.g., missing '@' or domain).
+- **Password Validation:**
+  - Test with a password that is at least 8 characters long.
+  - Test with a password that is shorter than 8 characters.
+- **Form Submission:**
+  - Test form submission with valid data.
+  - Test form submission with invalid data (e.g., invalid email or short password).
+- **UI Elements:**
+  - Ensure the error messages are displayed correctly for invalid inputs.
+  - Ensure the submit button is enabled/disabled based on form validity.
+
+### Example Usage
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import SignInForm from './SignInForm';
+
+ReactDOM.render(<SignInForm />, document.getElementById('root'));
+```
+
+This example demonstrates how to render the `SignInForm` component in a React application. 
