@@ -140,6 +140,16 @@ const SignUpForm = () => {
         </div>
       </div>
       <div className="space-above-large">
+        <li className={passwordValidations.hasNumber ? 'green' : 'red'}>
+            1 number
+          </li>
+          <li className={passwordValidations.isLongEnough ? 'green' : 'red'}>
+            Minimum 10 characters
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div className="space-above-large">
         <button
           id="nextButton"
           className={`next-button btn-new btn-large ${isFormValid() ? '' : 'btn-disabled'}`}
