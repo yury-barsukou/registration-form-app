@@ -10,7 +10,7 @@ const LABELS = {
 
 const BUTTON_TEXT = /Create Account/i;
 const VALID_EMAIL = 'john.doe@example.com';
-const VALID_PASSWORD = 'Password123';
+const VALID_PASSWORD = 'Password1234';
 
 const fillOutForm = (overrides = {}) => {
   const formData = {
@@ -61,12 +61,12 @@ describe('SignUpForm', () => {
     test('validates password criteria correctly', () => {
       const password = screen.getByLabelText(LABELS.password);
       fireEvent.change(password, { target: { value: 'short' } });
-      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
-      fireEvent.change(password, { target: { value: 'LongEnough1' } });
+      expect(screen.getByText(/Minimum 10 characters/i).className).toMatch(/red/);
+      fireEvent.change(password, { target: { value: 'LongEnough123' } });
       expect(screen.getByText(/1 uppercase character/i).className).toMatch(/green/);
       expect(screen.getByText(/1 lowercase character/i).className).toMatch(/green/);
       expect(screen.getByText(/1 number/i).className).toMatch(/green/);
-      expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
+      expect(screen.getByText(/Minimum 10 characters/i).className).toMatch(/green/);
     });
   });
 
