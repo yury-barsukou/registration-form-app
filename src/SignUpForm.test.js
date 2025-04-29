@@ -10,7 +10,7 @@ const LABELS = {
 
 const BUTTON_TEXT = /Create Account/i;
 const VALID_EMAIL = 'john.doe@example.com';
-const VALID_PASSWORD = 'Password123';
+const VALID_PASSWORD = 'Password1234';
 
 const fillOutForm = (overrides = {}) => {
   const formData = {
