@@ -68,6 +68,16 @@ describe('SignUpForm', () => {
       expect(screen.getByText(/1 number/i).className).toMatch(/green/);
       expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
     });
+
+    test('validates password criteria with edge cases', () => {
+      const password = screen.getByLabelText(LABELS.password);
+      fireEvent.change(password, { target: { value: 'Password' } });
+      expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+      fireEvent.change(password, { target: { value: 'password123' } });
+      expect(screen.getByText(/1 uppercase character/i).className).toMatch(/red/);
+      fireEvent.change(password, { target: { value: 'PASSWORD123' } });
+      expect(screen.getByText(/1 lowercase character/i).className).toMatch(/red/);
+    });
   });
 
   describe('Form Submission', () => {
@@ -95,6 +105,12 @@ describe('SignUpForm', () => {
       const formData = fillOutForm();
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+    });
+
+    test('does not call console log on invalid form submission', () => {
+      fillOutForm({ firstName: '' }); // Explicitly set an invalid field
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not.toHaveBeenCalled();
     });
   });
 });
