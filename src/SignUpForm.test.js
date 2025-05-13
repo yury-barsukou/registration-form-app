@@ -68,6 +68,24 @@ describe('SignUpForm', () => {
       expect(screen.getByText(/1 number/i).className).toMatch(/green/);
       expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/green/);
     });
+
+    test('validates password criteria with various inputs', () => {
+      const password = screen.getByLabelText(LABELS.password);
+      const testCases = [
+        { value: 'NoNumber', expected: { hasUppercase: true, hasLowercase: true, hasNumber: false, isLongEnough: true } },
+        { value: 'nonumber1', expected: { hasUppercase: false, hasLowercase: true, hasNumber: true, isLongEnough: true } },
+        { value: 'SHORT1', expected: { hasUppercase: true, hasLowercase: false, hasNumber: true, isLongEnough: false } },
+        { value: 'ValidPass1', expected: { hasUppercase: true, hasLowercase: true, hasNumber: true, isLongEnough: true } },
+      ];
+
+      testCases.forEach(({ value, expected }) => {
+        fireEvent.change(password, { target: { value } });
+        expect(screen.getByText(/1 uppercase character/i).className).toMatch(expected.hasUppercase ? /green/ : /red/);
+        expect(screen.getByText(/1 lowercase character/i).className).toMatch(expected.hasLowercase ? /green/ : /red/);
+        expect(screen.getByText(/1 number/i).className).toMatch(expected.hasNumber ? /green/ : /red/);
+        expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(expected.isLongEnough ? /green/ : /red/);
+      });
+    });
   });
 
   describe('Form Submission', () => {
@@ -83,7 +101,7 @@ describe('SignUpForm', () => {
 
     test('enables Create Account button with valid form', () => {
       fillOutForm();
-      expect(screen.getByRole('button', { name: BUTTON_TEXT })).not.toBeDisabled();
+      expect(screen.getByRole('button', { name: BUTTON_TEXT })).not toBeDisabled();
     });
 
     test('disables Create Account button with invalid form', () => {
@@ -95,6 +113,12 @@ describe('SignUpForm', () => {
       const formData = fillOutForm();
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+    });
+
+    test('does not call console log on invalid form submission', () => {
+      fillOutForm({ email: 'invalid' });
+      fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
+      expect(consoleSpy).not toHaveBeenCalled();
     });
   });
 });
