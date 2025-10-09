@@ -70,7 +70,7 @@ const SignInForm = () => {
           />
           {!isSignInPasswordValid && (
             <div className="password-validation-message invalid">
-              Your password must have at least 8 characters
+              Your password must have at least 10 characters
             </div>
           )}
         </div>
