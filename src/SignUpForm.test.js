@@ -97,4 +97,3 @@ describe('SignUpForm', () => {
       expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
     });
   });
-});
