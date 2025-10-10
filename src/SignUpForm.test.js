@@ -42,6 +42,20 @@ describe('SignUpForm', () => {
     expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeInTheDocument();
   });
 
+  test('initial state: password validations are present and button is disabled', () => {
+    expect(screen.getByText(/1 uppercase character/i)).toBeInTheDocument();
+    expect(screen.getByText(/1 lowercase character/i)).toBeInTheDocument();
+    expect(screen.getByText(/1 number/i)).toBeInTheDocument();
+    expect(screen.getByText(/Minimum 8 characters/i)).toBeInTheDocument();
+
+    expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
+    
+    expect(screen.getByText(/1 uppercase character/i).className).toMatch(/red/);
+    expect(screen.getByText(/1 lowercase character/i).className).toMatch(/red/);
+    expect(screen.getByText(/1 number/i).className).toMatch(/red/);
+    expect(screen.getByText(/Minimum 8 characters/i).className).toMatch(/red/);
+  });
+
   describe('Field Entry', () => {
     test.each(Object.entries(LABELS))('allows entry of %s', (fieldName, labelRegex) => {
       const value = 'TestValue';
@@ -71,14 +85,17 @@ describe('SignUpForm', () => {
   });
 
   describe('Form Submission', () => {
-    let consoleSpy;
+    let consoleLogSpy;
+    let consoleErrorSpy;
 
     beforeEach(() => {
-      consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+      consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+      consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     });
 
     afterEach(() => {
-      consoleSpy.mockRestore();
+      consoleLogSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
     });
 
     test('enables Create Account button with valid form', () => {
@@ -91,10 +108,26 @@ describe('SignUpForm', () => {
       expect(screen.getByRole('button', { name: BUTTON_TEXT })).toBeDisabled();
     });
 
+    test('button has btn-disabled class when invalid and loses it when valid', () => {
+      fillOutForm({ firstName: '' });
+      const btn = screen.getByRole('button', { name: BUTTON_TEXT });
+      expect(btn).toHaveClass('btn-disabled');
+
+      fireEvent.change(screen.getByLabelText(LABELS.firstName), { target: { value: 'Jane' } });
+      expect(btn).not.toHaveClass('btn-disabled');
+    });
+
     test('calls console log with correct data on valid form submission', () => {
       const formData = fillOutForm();
       fireEvent.click(screen.getByRole('button', { name: BUTTON_TEXT }));
-      expect(consoleSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+      expect(consoleLogSpy).toHaveBeenLastCalledWith('Form submitted:', formData);
+    });
+
+    test('submitting an invalid form logs an error', () => {
+      fillOutForm({ email: 'bad' });
+      const btn = screen.getByRole('button', { name: BUTTON_TEXT });
+      const form = document.getElementById('mycompany-create-form');
+      fireEvent.submit(form);
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Form is invalid');
     });
   });
-});
