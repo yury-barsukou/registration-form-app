@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './UserAuthForms.css';
 
-const SignInForm = () => {
+const SignInForm = ({ onSubmit, isSubmitting = false }) => {
   const [signInData, setSignInData] = useState({
     email: '',
     password: '',
@@ -31,11 +31,23 @@ const SignInForm = () => {
 
   const handleSignInSubmit = (e) => {
     e.preventDefault();
+    // mark validation state for empty fields so errors are shown to the user
+    if (!signInData.email) {
+      setIsEmailValid(false);
+    }
+    if (!signInData.password || signInData.password.length < 8) {
+      setIsSignInPasswordValid(false);
+    }
+
     if (isSignInFormValid()) {
-      console.log('Sign In submitted:', signInData);
-      // Handle the sign-in form submission, e.g., sending data to a server
+      if (onSubmit) {
+        onSubmit(signInData);
+      }
     }
   };
+
+  const [showPassword, setShowPassword] = useState(false);
+  const toggleShowPassword = () => setShowPassword((s) => !s);
 
   return (
     <form id="mycompany-login-form" onSubmit={handleSignInSubmit}>
@@ -60,7 +72,7 @@ const SignInForm = () => {
         <div className="input-group">
           <label htmlFor="company_pass_login">Password</label>
           <input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             id="company_pass_login"
             className="form-control"
             name="password"
@@ -68,6 +80,14 @@ const SignInForm = () => {
             value={signInData.password}
             onChange={handleSignInInputChange}
           />
+          <button
+            type="button"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            className="show-password-toggle"
+            onClick={toggleShowPassword}
+          >
+            {showPassword ? 'Hide' : 'Show'}
+          </button>
           {!isSignInPasswordValid && (
             <div className="password-validation-message invalid">
               Your password must have at least 8 characters
@@ -82,15 +102,13 @@ const SignInForm = () => {
           <button
             id="sign_in_btn"
             className={`next-button btn-new btn-large ${isSignInFormValid() ? '' : 'btn-disabled'}`}
-            disabled={!isSignInFormValid()}
+            disabled={!isSignInFormValid() || isSubmitting}
             type="submit"
           >
-            Sign In
+            {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>
         </div>
       </div>
     </form>
   );
 };
-
-export default SignInForm;
