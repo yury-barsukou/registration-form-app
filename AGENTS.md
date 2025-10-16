@@ -35,16 +35,38 @@ npm run build
 
 ## Testing Instructions
 
-### Run all tests with coverage
-```bash
-npm test -- --coverage --watchAll=false
+⚠️ **IMPORTANT FOR AUTOMATED AGENTS/CODEX**: 
+- Use the appropriate command syntax for your shell environment
+- **PowerShell (Windows)**: Use `$env:VARIABLE=$value; command` with semicolon `;` as separator
+- **Bash/Unix (Linux/Mac)**: Use `VARIABLE=value command` or `export VARIABLE=value && command`
+- Never mix shell syntaxes (e.g., don't use `bash -lc` wrapper on Windows PowerShell)
+
+### Run all tests with coverage (autonomous/CI mode)
+
+**For PowerShell (Windows):**
+```powershell
+$env:CI=$true; npm test
 ```
+
+**For Bash/Unix (Linux/Mac):**
+```bash
+CI=true npm test
+```
+
+**Common Mistakes to AVOID:**
+- ❌ Using Bash syntax in PowerShell: `CI=true npm test` (fails on Windows)
+- ❌ Using PowerShell syntax in Bash: `$env:CI=$true; npm test` (fails on Linux/Mac)
+- ❌ Using `npm test -- --watchAll=false` (still prompts for confirmation in some cases)
+- ❌ Using wrong separator: `export CI=true && npm test` in PowerShell (invalid operator)
+- ❌ Using wrapper: `bash -lc 'CI=true npm test'` on Windows PowerShell
+- ✅ **Match your command to your shell environment**
 
 This command:
 - Executes all test suites (currently `SignUpForm.test.js`)
 - Generates coverage reports in the `coverage/` directory
-- Runs in CI mode (non-interactive)
+- Runs in CI mode (non-interactive, no watch mode)
 - Exits after test completion
+- Does not prompt user for confirmation
 
 ### Run tests in watch mode (interactive)
 ```bash
@@ -74,6 +96,16 @@ After running tests with `--coverage`, open:
 ```
 coverage/lcov-report/index.html
 ```
+
+### Test Configuration Notes
+The test script in `package.json` includes:
+- `--coverage`: Automatically generates coverage reports
+- `--maxWorkers=1`: Uses single worker to prevent "worker process failed to exit" warnings
+
+This configuration ensures:
+- Tests run reliably without worker process issues
+- Coverage reports are always generated
+- Tests complete cleanly in CI environments
 
 ### Coverage Configuration
 Tests collect coverage for:
@@ -132,7 +164,11 @@ src/
 
 Always run tests before committing changes:
 ```bash
-npm test -- --coverage --watchAll=false
+# PowerShell
+$env:CI=$true; npm test
+
+# Bash/Unix
+CI=true npm test
 ```
 
 Ensure:
