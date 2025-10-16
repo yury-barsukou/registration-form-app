@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import SignUpForm from './SignUpForm';
 
 const LABELS = {
@@ -32,6 +32,10 @@ const fillOutForm = (overrides = {}) => {
 describe('SignUpForm', () => {
   beforeEach(() => {
     render(<SignUpForm />);
+  });
+
+  afterEach(() => {
+    cleanup();
   });
 
   test('renders the sign-up form with all fields', () => {
