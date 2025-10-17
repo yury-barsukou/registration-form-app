@@ -15,12 +15,15 @@ The project uses:
 - Jest for test execution
 - Create React App for build tooling
 
-## Setup Commands
+## Environment Setup
 
-Install dependencies:
-```bash
-npm install
-```
+⚠️ **CRITICAL FOR AUTOMATED AGENTS/CODEX**:
+- **ALL DEPENDENCIES ARE PRE-INSTALLED** - Do NOT run `npm install` or any package installation commands
+- The environment is fully configured and ready for test execution
+- Node modules and all required packages are already available
+- Only use commands for testing, building, or running the application
+
+## Available Commands
 
 Start development server:
 ```bash
@@ -36,6 +39,7 @@ npm run build
 ## Testing Instructions
 
 ⚠️ **IMPORTANT FOR AUTOMATED AGENTS/CODEX**: 
+- **NEVER run `npm install` or install packages** - all dependencies are pre-installed
 - Use the appropriate command syntax for your shell environment
 - **PowerShell (Windows)**: Use `$env:VARIABLE=$value; command` with semicolon `;` as separator
 - **Bash/Unix (Linux/Mac)**: Use `VARIABLE=value command` or `export VARIABLE=value && command`
@@ -218,9 +222,6 @@ Ensure:
 - Node modules and build artifacts are in `.gitignore`
 
 ## Troubleshooting
-
-### Tests fail with "cannot find module"
-Run: `npm install`
 
 ### Port 3000 already in use
 Either:
